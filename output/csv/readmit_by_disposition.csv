@@ -1,0 +1,13 @@
+facility,disposition,index_discharges,readmits_30d,readmit_rate_pct
+Lakeside Regional,Left Against Medical Advice,76,21,27.6
+Lakeside Regional,Skilled Nursing Facility,410,60,14.6
+Lakeside Regional,Home Health,397,42,10.6
+Lakeside Regional,Home/Self Care,1695,161,9.5
+Mercy North,Left Against Medical Advice,114,32,28.1
+Mercy North,Skilled Nursing Facility,626,84,13.4
+Mercy North,Home Health,528,67,12.7
+Mercy North,Home/Self Care,2202,213,9.7
+Mercy South,Left Against Medical Advice,133,55,41.4
+Mercy South,Skilled Nursing Facility,686,133,19.4
+Mercy South,Home Health,568,109,19.2
+Mercy South,Home/Self Care,2542,375,14.8

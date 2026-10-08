@@ -1,0 +1,22 @@
+facility,priority,test,orders,median_tat_min,target_min,pct_within_target
+Mercy South,STAT,Lactate,3297,49.0,60,69.5
+Mercy South,STAT,CBC,14626,48.0,60,70.5
+Mercy South,STAT,Troponin I,9123,48.0,60,70.6
+Mercy South,STAT,Basic Metabolic Panel,15711,48.0,60,71.3
+Lakeside Regional,STAT,CBC,9051,44.0,60,81.3
+Lakeside Regional,STAT,Basic Metabolic Panel,9837,45.0,60,81.7
+Lakeside Regional,STAT,Lactate,2101,45.0,60,81.7
+Lakeside Regional,STAT,Troponin I,5775,45.0,60,81.8
+Mercy North,STAT,CBC,13165,42.0,60,86.4
+Mercy North,STAT,Troponin I,7943,41.0,60,87.1
+Mercy North,STAT,Basic Metabolic Panel,14153,41.0,60,87.2
+Mercy North,STAT,Lactate,2900,41.0,60,87.7
+Mercy South,Routine,Lactate,358,97.0,240,96.4
+Lakeside Regional,Routine,CBC,11860,95.0,240,97.8
+Lakeside Regional,Routine,Basic Metabolic Panel,12812,95.0,240,97.9
+Mercy North,Routine,CBC,16151,95.0,240,98.0
+Mercy South,Routine,CBC,18172,94.0,240,98.0
+Mercy North,Routine,Basic Metabolic Panel,17424,95.0,240,98.1
+Mercy South,Routine,Basic Metabolic Panel,19461,95.0,240,98.2
+Mercy North,Routine,Lactate,311,92.0,240,99.0
+Lakeside Regional,Routine,Lactate,237,92.0,240,99.2

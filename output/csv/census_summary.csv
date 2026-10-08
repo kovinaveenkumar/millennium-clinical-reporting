@@ -1,0 +1,10 @@
+facility,nurse_unit,staffed_beds,avg_census,peak_census,avg_occupancy_pct,days_at_95pct_plus,days
+Lakeside Regional,LR 3W Med/Surg,40,38.4,61,96.1,95,181
+Lakeside Regional,LR ICU,10,9.4,19,93.9,84,181
+Lakeside Regional,LR 4E Telemetry,20,18.6,32,92.9,93,181
+Mercy North,MN 4E Telemetry,27,24.5,35,90.8,71,181
+Mercy South,MS 3W Med/Surg,65,57.6,76,88.6,64,181
+Mercy South,MS 4E Telemetry,34,29.2,45,85.9,52,181
+Mercy North,MN 3W Med/Surg,61,52.0,71,85.3,38,181
+Mercy North,MN ICU,14,11.5,19,82.4,44,181
+Mercy South,MS ICU,17,13.9,22,82.0,43,181

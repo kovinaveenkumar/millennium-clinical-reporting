@@ -1,0 +1,36 @@
+{
+  "KPI": {
+    "STATUS_DATA": {
+      "STATUS": "S"
+    },
+    "START_DT": "2026-01-01",
+    "END_DT": "2026-06-30",
+    "FAC_CNT": 3,
+    "QUAL": [
+      {
+        "FACILITY": "Lakeside Regional",
+        "ED_VISITS": 12977,
+        "ED_MEDIAN_BOARD_MIN": 311.0,
+        "STAT_PCT_60": 81.6,
+        "CRIT_PCT_30": 91.5,
+        "READMIT_PCT": 11.0
+      },
+      {
+        "FACILITY": "Mercy South",
+        "ED_VISITS": 20419,
+        "ED_MEDIAN_BOARD_MIN": 116.0,
+        "STAT_PCT_60": 70.7,
+        "CRIT_PCT_30": 91.7,
+        "READMIT_PCT": 17.1
+      },
+      {
+        "FACILITY": "Mercy North",
+        "ED_VISITS": 17850,
+        "ED_MEDIAN_BOARD_MIN": 95.0,
+        "STAT_PCT_60": 86.9,
+        "CRIT_PCT_30": 87.6,
+        "READMIT_PCT": 11.4
+      }
+    ]
+  }
+}

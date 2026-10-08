@@ -1,0 +1,7 @@
+experiment,variant,median_seconds,query_plan
+1 sargable date filter (1 week of orders),date() around orig_order_dt_tm,0.0147,SCAN o USING COVERING INDEX xie_ord_encntr | USE TEMP B-TREE FOR GROUP BY
+1 sargable date filter (1 week of orders),bare range on orig_order_dt_tm,0.0019,SEARCH o USING INDEX xie_ord_dt (orig_order_dt_tm>? AND orig_order_dt_tm<?) | USE TEMP B-TREE FOR GROUP BY
+2 census_summary report (6 months),as first written,2.9101,BLOOM FILTER ON h (active_ind=?) | SEARCH h USING AUTOMATIC PARTIAL COVERING INDEX (active_ind=?) LEFT-JOIN
+2 census_summary report (6 months),+h.active_ind (index use disabled on that term),0.0794,SEARCH h USING INDEX xie_elh_unit (loc_nurse_unit_cd=? AND beg_effective_dt_tm<?) LEFT-JOIN
+3 census_daily rewrite (181 days x 9 units),range join: segment covers midnight,0.1339,SEARCH h USING INDEX xie_elh_unit per unit-day
+3 census_daily rewrite (181 days x 9 units),running sum of +1/-1 deltas (identical output),0.0323,one pass over segments + window SUM

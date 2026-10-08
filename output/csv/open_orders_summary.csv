@@ -1,0 +1,21 @@
+facility,test,priority,open_over_24h,avg_hours_open
+Mercy South,Basic Metabolic Panel,Routine,20,1853.0
+Mercy North,Basic Metabolic Panel,STAT,19,2325.0
+Mercy North,CBC,Routine,17,2137.0
+Lakeside Regional,Basic Metabolic Panel,Routine,15,1982.0
+Mercy North,Basic Metabolic Panel,Routine,14,2497.0
+Mercy South,Basic Metabolic Panel,STAT,14,2225.0
+Mercy South,CBC,Routine,13,2018.0
+Mercy North,Troponin I,STAT,12,1977.0
+Mercy North,CBC,STAT,11,1646.0
+Mercy South,CBC,STAT,11,1881.0
+Lakeside Regional,CBC,STAT,9,926.0
+Lakeside Regional,CBC,Routine,7,1738.0
+Mercy South,Troponin I,STAT,7,1940.0
+Lakeside Regional,Basic Metabolic Panel,STAT,6,1870.0
+Lakeside Regional,Troponin I,STAT,5,2012.0
+Mercy South,Lactate,STAT,5,2201.0
+Lakeside Regional,Lactate,STAT,4,3017.0
+Mercy North,Lactate,STAT,2,640.0
+Mercy North,Lactate,Routine,1,3835.0
+Mercy South,Lactate,Routine,1,1123.0

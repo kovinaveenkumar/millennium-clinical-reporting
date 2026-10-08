@@ -1,0 +1,22 @@
+type,check,expected,actual,passed
+data quality,encounter_without_person,0,0,True
+data quality,order_without_encounter,0,0,True
+data quality,discharge_before_registration,0,0,True
+data quality,overlapping_location_segments,0,0,True
+data quality,completed_order_without_current_result,0,0,True
+data quality,result_on_cancelled_order,0,0,True
+data quality,event_with_multiple_current_versions,0,0,True
+data quality,broken_version_chain,0,0,True
+data quality,code_value_does_not_resolve,0,0,True
+data quality,encounter_without_one_active_fin,0,0,True
+data quality,person_without_one_active_mrn,0,0,True
+data quality,order_without_priority,0,0,True
+data quality,lab_result_not_numeric,0,0,True
+data quality,event_after_data_cut,0,0,True
+control total,ED visits: report = source,51246,51246,True
+control total,ed_throughput: sum of facility prompts = All,51246,51246,True
+control total,readmit_by_facility: sum of facility prompts = All,9977,9977,True
+control total,critical_compliance: sum of facility prompts = All,3734,3734,True
+control total,lab_tat: sum of facility prompts = All,204468,204468,True
+control total,Lab TAT orders: report = source,204468,204468,True
+control total,test patients excluded (30 test encounters in source),0,0,True

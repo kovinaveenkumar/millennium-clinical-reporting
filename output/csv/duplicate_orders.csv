@@ -1,0 +1,13 @@
+facility,test,orders,duplicate_orders,duplicates_performed,dup_per_1000_orders
+Mercy North,Lactate,3361,179,137,53.3
+Mercy North,Basic Metabolic Panel,33099,1715,1204,51.8
+Mercy North,CBC,30740,1418,888,46.1
+Mercy North,Troponin I,8319,277,179,33.3
+Mercy South,Lactate,3794,86,71,22.7
+Lakeside Regional,Basic Metabolic Panel,23422,466,374,19.9
+Mercy South,Basic Metabolic Panel,36397,712,574,19.6
+Lakeside Regional,Lactate,2423,44,34,18.2
+Lakeside Regional,CBC,21600,249,169,11.5
+Mercy South,CBC,33954,370,230,10.9
+Mercy South,Troponin I,9486,80,51,8.4
+Lakeside Regional,Troponin I,6010,41,28,6.8

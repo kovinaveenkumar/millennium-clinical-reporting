@@ -1,0 +1,26 @@
+{
+  "_comment": "Discern Expert (EKS) style rule definitions. Each rule has EVOKE (what triggers it), LOGIC (conditions) and ACTION (what it would do). Rules are replayed against history by src/discern_rules.py in SILENT mode: logic is evaluated and logged to EKS_MODULE_AUDIT, no alert is shown. That is how alert volume and accuracy are measured before a rule is turned on.",
+  "rules": [
+    {
+      "module_name": "CUST_LAB_DUP_ORDER",
+      "evoke": "ORDER_SIGN (catalog type = Laboratory)",
+      "logic": {
+        "template": "same orderable already ordered on this encounter within N minutes, prior order not cancelled at sign time",
+        "window_min": 120,
+        "orderables": ["CBC", "Basic Metabolic Panel", "Troponin I", "Lactate"]
+      },
+      "action": "Interruptive alert to ordering provider: 'Same test ordered @MIN min ago on this visit' - options: Cancel new order / Keep (reason required)",
+      "mode": "SILENT"
+    },
+    {
+      "module_name": "CUST_CRIT_LAB_ESCALATE",
+      "evoke": "TIMER: 30 minutes after a lab result verifies with normalcy = CRITICAL",
+      "logic": {
+        "template": "no 'Critical Result Notification' documented on the encounter since the result verified",
+        "minutes": 30
+      },
+      "action": "Message to charge nurse pool of the patient's unit + task 'Call critical result'",
+      "mode": "SILENT"
+    }
+  ]
+}

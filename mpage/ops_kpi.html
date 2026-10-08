@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+  MPage component: facility KPI summary.
+  Inside PowerChart it calls the CCL driver cust_ops_kpi_mp through XMLCclRequest and
+  reads the JSON from the reply (_memory_reply_string = cnvtrectojson(kpi)).
+  Outside Millennium it loads ../output/mpage_payload.json, which build_html.py writes
+  in the same shape - so the component can be built and tested with no Cerner domain.
+-->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ops KPI MPage</title>
+<style>
+:root{--bg:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--line:#e4e3df;--ok:#067647;--ok-bg:#e7f6ec;--bad:#b42318;--bad-bg:#fdecec}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1a19;--panel:#222220;--ink:#fff;--ink2:#c3c2b7;--line:#3a3a37;--ok:#47cd89;--ok-bg:#16301f;--bad:#f97066;--bad-bg:#3a1f1d}}
+:root[data-theme="dark"]{--bg:#1a1a19;--panel:#222220;--ink:#fff;--ink2:#c3c2b7;--line:#3a3a37;--ok:#47cd89;--ok-bg:#16301f;--bad:#f97066;--bad-bg:#3a1f1d}
+body{margin:0;padding:16px;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
+h1{font-size:18px;margin:0 0 4px}.sub{color:var(--ink2);font-size:12px;margin-bottom:12px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;background:var(--panel);font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--ink2);font-weight:600}
+.s{display:inline-block;padding:1px 7px;border-radius:9px;font-size:12px}.s.ok{background:var(--ok-bg);color:var(--ok)}.s.bad{background:var(--bad-bg);color:var(--bad)}
+.err{color:var(--bad)}
+</style></head><body>
+<h1>Operations KPIs by facility</h1><div class="sub" id="sub">Loading…</div>
+<div class="wrap"><table><thead><tr><th>Facility</th><th>ED visits</th><th>ED boarding (median min)</th><th>STAT labs ≤ 60 min</th><th>Critical calls ≤ 30 min</th><th>30-day readmits</th></tr></thead><tbody id="rows"></tbody></table></div>
+<script>
+// thresholds: [value, isBad]  (status always shown as text + colour, never colour alone)
+const RULES = { ED_MEDIAN_BOARD_MIN: v => v > 240, STAT_PCT_60: v => v < 80, CRIT_PCT_30: v => v < 80, READMIT_PCT: v => v > 15 };
+const badge = (k, v, txt) => `<span class="s ${RULES[k](v) ? 'bad' : 'ok'}">${RULES[k](v) ? '✕ ' : '✓ '}${txt}</span>`;
+
+function render(json) {
+  const k = json.KPI;
+  document.getElementById('sub').textContent = `${k.START_DT} to ${k.END_DT} · ${k.FAC_CNT} facilities · status ${k.STATUS_DATA.STATUS}`;
+  document.getElementById('rows').innerHTML = k.QUAL.map(q => `<tr><td>${q.FACILITY}</td>
+    <td>${q.ED_VISITS.toLocaleString()}</td>
+    <td>${badge('ED_MEDIAN_BOARD_MIN', q.ED_MEDIAN_BOARD_MIN, q.ED_MEDIAN_BOARD_MIN.toFixed(0))}</td>
+    <td>${badge('STAT_PCT_60', q.STAT_PCT_60, q.STAT_PCT_60.toFixed(1) + '%')}</td>
+    <td>${badge('CRIT_PCT_30', q.CRIT_PCT_30, q.CRIT_PCT_30.toFixed(1) + '%')}</td>
+    <td>${badge('READMIT_PCT', q.READMIT_PCT, q.READMIT_PCT.toFixed(1) + '%')}</td></tr>`).join('');
+}
+function fail(msg) { document.getElementById('sub').innerHTML = `<span class="err">${msg}</span>`; }
+
+function load(start, end) {
+  if (typeof XMLCclRequest !== 'undefined') {           // inside PowerChart
+    const req = new XMLCclRequest();
+    req.onreadystatechange = () => {
+      if (req.readyState !== 4) return;
+      if (req.status === 200) { try { render(JSON.parse(req.responseText)); } catch (e) { fail('Bad JSON from cust_ops_kpi_mp'); } }
+      else fail('cust_ops_kpi_mp failed: ' + req.status);
+    };
+    req.open('GET', 'cust_ops_kpi_mp');
+    req.send(`"MINE","${start} 00:00:00","${end} 23:59:59"`);
+  } else {                                              // off-domain: same JSON from the Python build
+    fetch('../output/mpage_payload.json').then(r => r.json()).then(render)
+      .catch(() => fail('Run python src/build_html.py first (writes output/mpage_payload.json).'));
+  }
+}
+load('01-JAN-2026', '30-JUN-2026');
+</script></body></html>

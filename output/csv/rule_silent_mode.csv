@@ -1,0 +1,7 @@
+module_name,facility,fires,fires_per_day,encounters
+CUST_CRIT_LAB_ESCALATE,Mercy North,179,1.0,174
+CUST_CRIT_LAB_ESCALATE,Mercy South,154,0.9,154
+CUST_CRIT_LAB_ESCALATE,Lakeside Regional,96,0.5,96
+CUST_LAB_DUP_ORDER,Mercy North,3657,20.2,3196
+CUST_LAB_DUP_ORDER,Mercy South,1270,7.0,1219
+CUST_LAB_DUP_ORDER,Lakeside Regional,818,4.5,788

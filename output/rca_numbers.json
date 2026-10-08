@@ -1,0 +1,63 @@
+{
+  "ed": {
+    "v1_visits": 41289,
+    "v2_visits": 51246,
+    "v1_pct_over_4h": 27.4,
+    "v2_pct_over_4h": 40.6,
+    "by_facility": [
+      {
+        "facility": "Lakeside Regional",
+        "ed_visits_v1": 10365,
+        "ed_visits_v2": 12977,
+        "pct_over_4h_v1": 32.0,
+        "pct_over_4h_v2": 48.3
+      },
+      {
+        "facility": "Mercy North",
+        "ed_visits_v1": 14384,
+        "ed_visits_v2": 17850,
+        "pct_over_4h_v1": 23.8,
+        "pct_over_4h_v2": 35.7
+      },
+      {
+        "facility": "Mercy South",
+        "ed_visits_v1": 16540,
+        "ed_visits_v2": 20419,
+        "pct_over_4h_v1": 27.7,
+        "pct_over_4h_v2": 40.2
+      }
+    ]
+  },
+  "lab": {
+    "superseded_rows": 6436,
+    "in_error_current": 1563,
+    "corrected_events": 4873,
+    "median_correction_delay_h": 19.1,
+    "by_facility": [
+      {
+        "facility": "Lakeside Regional",
+        "priority": "STAT",
+        "results": 46392,
+        "pct_within_60_v1": 80.3,
+        "orders": 26764.0,
+        "pct_within_60_v2": 81.6
+      },
+      {
+        "facility": "Mercy North",
+        "priority": "STAT",
+        "results": 66769,
+        "pct_within_60_v1": 85.4,
+        "orders": 38161.0,
+        "pct_within_60_v2": 86.9
+      },
+      {
+        "facility": "Mercy South",
+        "priority": "STAT",
+        "results": 74326,
+        "pct_within_60_v1": 69.7,
+        "orders": 42757.0,
+        "pct_within_60_v2": 70.7
+      }
+    ]
+  }
+}

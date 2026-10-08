@@ -1,0 +1,194 @@
+facility,current_unit,fin,order_id,test,priority,orig_order_dt_tm,hours_open,suggested_action
+Lakeside Regional,LR ICU,LR30005017,400015678,Basic Metabolic Panel,Routine,2026-01-02 04:41:37,4315.3,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30006693,400020688,Lactate,STAT,2026-01-05 19:40:21,4228.3,Discharged - cancel or follow up
+Mercy South,MS ED,MS30006508,400020221,Troponin I,STAT,2026-01-05 22:01:59,4226.0,Discharged - cancel or follow up
+Mercy South,MS ED,MS30007323,400022691,CBC,STAT,2026-01-07 16:47:27,4183.2,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30006363,400019771,CBC,Routine,2026-01-10 05:24:48,4122.6,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30006919,400021355,Basic Metabolic Panel,Routine,2026-01-12 04:46:04,4075.2,Discharged - cancel or follow up
+Mercy South,MS ED,MS30009006,400027702,Basic Metabolic Panel,STAT,2026-01-12 19:37:42,4060.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30009301,400028514,Troponin I,STAT,2026-01-13 17:11:08,4038.8,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30008618,400026520,CBC,Routine,2026-01-15 05:21:59,4002.6,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30009312,400028546,Basic Metabolic Panel,Routine,2026-01-15 05:52:50,4002.1,Discharged - cancel or follow up
+Mercy North,MN ED,MN30011035,400033883,CBC,STAT,2026-01-18 07:27:02,3928.5,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30011584,400035666,Basic Metabolic Panel,Routine,2026-01-19 08:30:58,3903.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30011876,400036513,Lactate,STAT,2026-01-20 09:03:49,3878.9,Discharged - cancel or follow up
+Mercy North,MN ED,MN30011730,400036032,Basic Metabolic Panel,STAT,2026-01-20 22:39:07,3865.3,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30011189,400034374,Basic Metabolic Panel,Routine,2026-01-21 04:16:23,3859.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30011426,400035246,Lactate,Routine,2026-01-22 04:47:07,3835.2,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30013042,400039915,CBC,Routine,2026-01-24 04:28:48,3787.5,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30012571,400038623,CBC,Routine,2026-01-24 05:44:24,3786.3,Discharged - cancel or follow up
+Mercy South,MS ED,MS30013957,400042832,Basic Metabolic Panel,STAT,2026-01-26 17:18:33,3726.7,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30013914,400042737,Basic Metabolic Panel,Routine,2026-01-27 04:05:03,3715.9,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30014935,400045679,CBC,STAT,2026-01-28 14:08:12,3681.9,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30070362,400215057,Basic Metabolic Panel,STAT,2026-01-28 20:10:01,3675.8,Discharged - cancel or follow up
+Mercy South,MS ED,MS30015165,400046416,CBC,STAT,2026-01-29 13:17:58,3658.7,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30015361,400046988,Basic Metabolic Panel,STAT,2026-01-29 14:14:29,3657.8,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30015728,400048031,Lactate,STAT,2026-01-30 13:59:34,3634.0,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30015372,400047030,Basic Metabolic Panel,Routine,2026-01-31 05:09:50,3618.8,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30016066,400049311,Troponin I,STAT,2026-01-31 15:33:42,3608.4,Discharged - cancel or follow up
+Mercy South,MS ED,MS30016199,400049794,Basic Metabolic Panel,STAT,2026-02-01 10:05:43,3589.9,Discharged - cancel or follow up
+Mercy North,MN ED,MN30016137,400049548,Basic Metabolic Panel,STAT,2026-02-01 19:39:58,3580.3,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30016666,400051246,Basic Metabolic Panel,Routine,2026-02-02 12:30:52,3563.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30016819,400051739,Troponin I,STAT,2026-02-03 22:31:50,3529.5,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30014632,400044846,Basic Metabolic Panel,Routine,2026-02-05 04:09:20,3499.8,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30017827,400054618,CBC,Routine,2026-02-05 10:52:06,3493.1,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30070380,400215213,CBC,Routine,2026-02-10 05:32:09,3378.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30019799,400060684,Basic Metabolic Panel,STAT,2026-02-11 06:52:42,3353.1,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30070526,400216568,Basic Metabolic Panel,Routine,2026-02-13 04:11:19,3307.8,Discharged - cancel or follow up
+Mercy South,MS ED,MS30020978,400064310,Troponin I,STAT,2026-02-14 00:51:47,3287.1,Discharged - cancel or follow up
+Mercy South,MS ED,MS30021290,400065404,CBC,STAT,2026-02-15 16:02:34,3248.0,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30021478,400066092,Troponin I,STAT,2026-02-16 18:50:36,3221.2,Discharged - cancel or follow up
+Lakeside Regional,LR ICU,LR30021767,400066958,CBC,Routine,2026-02-18 05:02:18,3187.0,Discharged - cancel or follow up
+Mercy North,MN ED,MN30022339,400068629,Basic Metabolic Panel,STAT,2026-02-18 20:39:11,3171.3,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30021968,400067534,CBC,Routine,2026-02-20 04:33:40,3139.4,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30021859,400067205,Basic Metabolic Panel,Routine,2026-02-20 04:34:30,3139.4,Discharged - cancel or follow up
+Mercy South,MS ED,MS30023196,400070978,Lactate,STAT,2026-02-20 14:02:41,3130.0,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30022566,400069225,Basic Metabolic Panel,Routine,2026-02-21 04:19:03,3115.7,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30020651,400063242,Basic Metabolic Panel,Routine,2026-02-21 04:44:19,3115.3,Discharged - cancel or follow up
+Mercy North,MN ED,MN30023776,400072786,Basic Metabolic Panel,STAT,2026-02-22 15:42:01,3080.3,Discharged - cancel or follow up
+Mercy South,MS ED,MS30024597,400075293,Basic Metabolic Panel,STAT,2026-02-24 21:24:34,3026.6,Discharged - cancel or follow up
+Mercy North,MN ICU,MN30023749,400072687,Basic Metabolic Panel,Routine,2026-02-25 04:34:47,3019.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30025248,400077117,Troponin I,STAT,2026-02-26 04:45:01,2995.2,Discharged - cancel or follow up
+Mercy North,MN ED,MN30025619,400078103,CBC,STAT,2026-02-27 12:56:18,2963.1,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30026010,400079247,CBC,Routine,2026-03-02 04:08:30,2899.9,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30026801,400081739,Lactate,STAT,2026-03-02 22:08:02,2881.9,Discharged - cancel or follow up
+Mercy North,MN ED,MN30026949,400082257,Basic Metabolic Panel,STAT,2026-03-03 14:58:51,2865.0,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30070640,400217612,Basic Metabolic Panel,Routine,2026-03-04 05:14:59,2850.8,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30027325,400083244,Basic Metabolic Panel,STAT,2026-03-04 09:36:21,2846.4,Discharged - cancel or follow up
+Mercy South,MS ED,MS30027455,400083619,Lactate,STAT,2026-03-04 10:23:31,2845.6,Discharged - cancel or follow up
+Mercy South,MS ED,MS30027429,400083561,CBC,STAT,2026-03-04 13:55:08,2842.1,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30027596,400084092,CBC,Routine,2026-03-05 05:33:06,2826.4,Discharged - cancel or follow up
+Mercy South,MS ED,MS30027888,400084964,CBC,STAT,2026-03-05 23:30:46,2808.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30028218,400085983,Basic Metabolic Panel,STAT,2026-03-06 16:53:53,2791.1,Discharged - cancel or follow up
+Mercy South,MS ED,MS30028529,400086911,Basic Metabolic Panel,STAT,2026-03-07 19:50:11,2764.2,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30028438,400086589,Basic Metabolic Panel,Routine,2026-03-09 04:18:42,2731.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30028128,400085759,Basic Metabolic Panel,Routine,2026-03-09 05:03:07,2730.9,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30028332,400086258,CBC,Routine,2026-03-10 04:45:33,2707.2,Discharged - cancel or follow up
+Mercy South,MS ED,MS30029553,400090123,Basic Metabolic Panel,STAT,2026-03-10 15:10:05,2696.8,Discharged - cancel or follow up
+Mercy South,MS ED,MS30030358,400092628,Troponin I,STAT,2026-03-12 12:55:46,2651.1,Discharged - cancel or follow up
+Mercy North,MN ICU,MN30028934,400088388,CBC,Routine,2026-03-13 05:06:54,2634.9,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30028496,400086808,CBC,Routine,2026-03-14 04:21:43,2611.6,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30031174,400094894,Basic Metabolic Panel,STAT,2026-03-14 13:07:19,2602.9,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30070768,400218682,CBC,STAT,2026-03-17 17:45:47,2526.2,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30031222,400095056,CBC,Routine,2026-03-18 05:06:59,2514.9,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30032705,400099437,Troponin I,STAT,2026-03-19 17:28:09,2478.5,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30033386,400101601,Basic Metabolic Panel,STAT,2026-03-20 17:29:15,2454.5,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30033393,400101639,Basic Metabolic Panel,Routine,2026-03-23 04:29:42,2395.5,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30034296,400104781,CBC,Routine,2026-03-23 09:31:00,2390.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30034026,400103831,Basic Metabolic Panel,STAT,2026-03-23 20:49:19,2379.2,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30034284,400104736,CBC,Routine,2026-03-24 04:31:52,2371.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30034633,400105727,Basic Metabolic Panel,STAT,2026-03-24 06:59:47,2369.0,Discharged - cancel or follow up
+Mercy North,MN Outpatient Lab,MN30034605,400105660,CBC,Routine,2026-03-24 15:46:58,2360.2,Discharged - cancel or follow up
+Mercy North,MN ED,MN30034470,400105193,Basic Metabolic Panel,STAT,2026-03-24 17:57:22,2358.0,Discharged - cancel or follow up
+Mercy South,MS ED,MS30034620,400105694,Basic Metabolic Panel,STAT,2026-03-24 18:36:23,2357.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30034908,400106426,Basic Metabolic Panel,STAT,2026-03-25 11:54:47,2340.1,Discharged - cancel or follow up
+Mercy North,MN ED,MN30035726,400108816,CBC,STAT,2026-03-27 10:00:53,2294.0,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30036559,400111442,Troponin I,STAT,2026-03-29 10:24:11,2245.6,Discharged - cancel or follow up
+Mercy North,MN ED,MN30036392,400110924,Basic Metabolic Panel,STAT,2026-03-29 19:39:43,2236.3,Discharged - cancel or follow up
+Mercy North,MN Outpatient Lab,MN30037879,400115630,Basic Metabolic Panel,Routine,2026-04-02 08:46:33,2151.2,Discharged - cancel or follow up
+Mercy North,MN ED,MN30037854,400115560,CBC,STAT,2026-04-02 10:23:22,2149.6,Discharged - cancel or follow up
+Mercy North,MN ED,MN30037807,400115405,Basic Metabolic Panel,STAT,2026-04-02 13:31:55,2146.5,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30037537,400114536,CBC,Routine,2026-04-03 04:29:32,2131.5,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30037782,400115298,CBC,Routine,2026-04-03 04:45:44,2131.2,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30036603,400111609,Basic Metabolic Panel,Routine,2026-04-03 05:33:38,2130.4,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30038392,400117174,Basic Metabolic Panel,Routine,2026-04-03 11:35:43,2124.4,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30038519,400117469,CBC,Routine,2026-04-05 04:34:05,2083.4,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30038541,400117525,Basic Metabolic Panel,Routine,2026-04-07 05:31:07,2034.5,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30038747,400118308,Basic Metabolic Panel,Routine,2026-04-07 05:37:21,2034.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30039942,400121953,CBC,STAT,2026-04-08 12:44:26,2003.3,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30040148,400122615,Troponin I,STAT,2026-04-08 15:29:32,2000.5,Discharged - cancel or follow up
+Mercy North,MN Outpatient Lab,MN30040346,400123200,Basic Metabolic Panel,Routine,2026-04-09 14:25:48,1977.6,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30039225,400119759,Basic Metabolic Panel,Routine,2026-04-10 04:46:28,1963.2,Discharged - cancel or follow up
+Mercy South,MS ED,MS30040796,400124466,Troponin I,STAT,2026-04-10 05:07:52,1962.9,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30070933,400220232,CBC,Routine,2026-04-15 04:58:40,1843.0,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30041746,400127559,Basic Metabolic Panel,Routine,2026-04-16 05:28:54,1818.5,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30042944,400131078,Basic Metabolic Panel,Routine,2026-04-16 09:47:49,1814.2,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30041738,400127479,CBC,Routine,2026-04-17 04:22:41,1795.6,Discharged - cancel or follow up
+Mercy North,MN ED,MN30043097,400131555,Troponin I,STAT,2026-04-17 09:31:37,1790.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30043147,400131739,Basic Metabolic Panel,STAT,2026-04-17 22:12:45,1777.8,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30042232,400128855,Basic Metabolic Panel,Routine,2026-04-18 04:28:48,1771.5,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30042755,400130558,Basic Metabolic Panel,Routine,2026-04-19 04:28:59,1747.5,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30043559,400132977,Basic Metabolic Panel,Routine,2026-04-19 04:46:00,1747.2,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30043701,400133464,Basic Metabolic Panel,Routine,2026-04-21 04:10:12,1699.8,Discharged - cancel or follow up
+Mercy North,MN Outpatient Lab,MN30044512,400136106,CBC,Routine,2026-04-21 15:38:36,1688.4,Discharged - cancel or follow up
+Mercy South,MS ED,MS30044645,400136502,Basic Metabolic Panel,STAT,2026-04-21 19:03:24,1684.9,Discharged - cancel or follow up
+Lakeside Regional,LR Outpatient Lab,LR30045144,400137997,Basic Metabolic Panel,Routine,2026-04-22 10:12:30,1669.8,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30044928,400137305,Basic Metabolic Panel,Routine,2026-04-23 04:46:39,1651.2,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30070980,400220689,Basic Metabolic Panel,Routine,2026-04-23 05:04:01,1650.9,Discharged - cancel or follow up
+Mercy North,MN ED,MN30045238,400138286,Basic Metabolic Panel,STAT,2026-04-23 10:33:54,1645.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30045181,400138112,Troponin I,STAT,2026-04-23 20:33:38,1635.4,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30045700,400139593,CBC,Routine,2026-04-25 05:14:25,1602.8,Discharged - cancel or follow up
+Mercy North,MN ED,MN30046012,400140576,Basic Metabolic Panel,STAT,2026-04-25 15:32:15,1592.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30045965,400140397,CBC,STAT,2026-04-25 20:34:42,1587.4,Discharged - cancel or follow up
+Mercy North,MN ED,MN30047380,400144874,Troponin I,STAT,2026-04-29 11:14:09,1500.8,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30047680,400145743,Troponin I,STAT,2026-04-29 16:04:34,1495.9,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30047314,400144602,CBC,Routine,2026-05-01 04:39:23,1459.3,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30071023,400221056,CBC,Routine,2026-05-03 05:12:03,1410.8,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30047135,400144161,Basic Metabolic Panel,Routine,2026-05-04 04:17:55,1387.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30049536,400151588,Troponin I,STAT,2026-05-05 12:17:29,1355.7,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30050213,400153644,Basic Metabolic Panel,STAT,2026-05-06 12:56:42,1331.1,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30050212,400153635,Lactate,STAT,2026-05-06 19:18:45,1324.7,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30047997,400146666,CBC,Routine,2026-05-07 04:48:12,1315.2,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30049246,400150663,Basic Metabolic Panel,Routine,2026-05-07 05:30:22,1314.5,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30050971,400155856,Basic Metabolic Panel,Routine,2026-05-08 09:08:45,1286.9,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30051594,400157679,Basic Metabolic Panel,Routine,2026-05-11 04:15:35,1219.7,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30052623,400160654,CBC,STAT,2026-05-13 07:33:31,1168.4,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30071183,400222460,CBC,Routine,2026-05-15 04:31:20,1123.5,Discharged - cancel or follow up
+Mercy South,MS ICU,MS30052998,400161693,Lactate,Routine,2026-05-15 04:34:19,1123.4,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30053555,400163295,Basic Metabolic Panel,Routine,2026-05-17 05:27:31,1074.5,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30053875,400164388,Lactate,STAT,2026-05-17 11:30:51,1068.5,Discharged - cancel or follow up
+Mercy North,MN ED,MN30053876,400164394,Basic Metabolic Panel,STAT,2026-05-17 22:13:19,1057.8,Discharged - cancel or follow up
+Lakeside Regional,LR Outpatient Lab,LR30054526,400166581,CBC,Routine,2026-05-18 15:55:46,1040.1,Discharged - cancel or follow up
+Mercy South,MS ED,MS30054746,400167306,CBC,STAT,2026-05-19 18:41:37,1013.3,Discharged - cancel or follow up
+Mercy South,MS ED,MS30055103,400168404,Lactate,STAT,2026-05-20 12:32:55,995.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30055515,400169686,Basic Metabolic Panel,STAT,2026-05-21 10:26:59,973.6,Discharged - cancel or follow up
+Mercy North,MN ED,MN30055729,400170291,CBC,STAT,2026-05-22 12:19:39,947.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30056114,400171514,CBC,STAT,2026-05-23 06:16:22,929.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30056098,400171465,CBC,STAT,2026-05-23 11:44:53,924.3,Discharged - cancel or follow up
+Mercy North,MN ED,MN30056404,400172639,Troponin I,STAT,2026-05-24 13:01:52,899.0,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30057663,400176387,Troponin I,STAT,2026-05-27 12:25:56,827.6,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30057368,400175520,Basic Metabolic Panel,Routine,2026-05-28 05:18:25,810.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30056162,400171686,Basic Metabolic Panel,Routine,2026-05-29 04:49:19,787.2,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30058574,400179088,Basic Metabolic Panel,STAT,2026-05-29 12:39:25,779.3,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30058871,400180093,CBC,STAT,2026-05-30 08:42:02,759.3,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30057700,400176518,CBC,Routine,2026-06-01 05:05:42,714.9,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30059519,400182236,Troponin I,STAT,2026-06-01 11:48:07,708.2,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30059506,400182200,CBC,Routine,2026-06-04 05:31:50,642.5,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30060648,400185456,Basic Metabolic Panel,Routine,2026-06-04 15:20:27,632.7,Discharged - cancel or follow up
+Mercy South,MS ED,MS30061319,400187480,CBC,STAT,2026-06-06 12:09:52,587.8,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30059615,400182517,Basic Metabolic Panel,Routine,2026-06-07 04:09:16,571.8,Discharged - cancel or follow up
+Mercy South,MS ED,MS30061539,400188262,CBC,STAT,2026-06-07 08:57:46,567.0,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30071368,400224146,Basic Metabolic Panel,Routine,2026-06-09 04:42:32,523.3,Discharged - cancel or follow up
+Mercy North,MN Outpatient Lab,MN30062193,400190392,CBC,Routine,2026-06-09 11:05:14,516.9,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30062226,400190454,Troponin I,STAT,2026-06-09 23:17:24,504.7,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30062819,400192234,CBC,Routine,2026-06-12 05:07:26,450.9,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30063496,400194287,Basic Metabolic Panel,STAT,2026-06-12 10:43:55,445.3,Discharged - cancel or follow up
+Mercy South,MS 4E Telemetry,MS30071690,400226886,Basic Metabolic Panel,Routine,2026-06-13 04:51:23,427.1,Discharged - cancel or follow up
+Mercy South,MS ED,MS30064016,400195907,Basic Metabolic Panel,STAT,2026-06-14 09:14:01,398.8,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30064144,400196394,Basic Metabolic Panel,STAT,2026-06-14 11:39:12,396.3,Discharged - cancel or follow up
+Mercy South,MS ED,MS30064882,400198641,CBC,STAT,2026-06-16 15:18:41,344.7,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30065394,400200093,CBC,STAT,2026-06-17 08:37:00,327.4,Discharged - cancel or follow up
+Mercy South,MS Outpatient Lab,MS30065321,400199890,Basic Metabolic Panel,Routine,2026-06-17 11:25:10,324.6,Discharged - cancel or follow up
+Mercy North,MN ED,MN30065099,400199322,CBC,STAT,2026-06-17 15:43:39,320.3,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30064403,400197150,Basic Metabolic Panel,Routine,2026-06-19 05:27:13,282.5,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30066115,400202164,CBC,STAT,2026-06-19 07:28:33,280.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30066046,400202018,Basic Metabolic Panel,STAT,2026-06-19 17:36:43,270.4,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30066121,400202187,CBC,STAT,2026-06-19 19:30:22,268.5,Discharged - cancel or follow up
+Mercy South,MS ED,MS30065974,400201801,CBC,STAT,2026-06-19 22:52:39,265.1,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30064726,400198166,CBC,Routine,2026-06-20 04:20:36,259.7,Discharged - cancel or follow up
+Mercy North,MN ED,MN30066303,400202691,Troponin I,STAT,2026-06-20 17:44:46,246.3,Discharged - cancel or follow up
+Lakeside Regional,LR ED,LR30066724,400204172,CBC,STAT,2026-06-21 12:40:29,227.3,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30071511,400225378,Lactate,STAT,2026-06-22 05:12:00,210.8,In house - recollect
+Mercy South,MS 4E Telemetry,MS30071475,400225079,CBC,Routine,2026-06-23 04:12:00,187.8,Discharged - cancel or follow up
+Mercy North,MN ED,MN30067287,400205831,Basic Metabolic Panel,STAT,2026-06-23 10:39:50,181.3,Discharged - cancel or follow up
+Lakeside Regional,LR 4E Telemetry,LR30067562,400206627,CBC,STAT,2026-06-23 20:44:05,171.3,In house - recollect
+Mercy South,MS ED,MS30067872,400207513,Lactate,STAT,2026-06-24 14:02:33,154.0,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30071473,400225057,Troponin I,STAT,2026-06-26 01:54:47,118.1,Discharged - cancel or follow up
+Mercy South,MS 3W Med/Surg,MS30068171,400208346,Basic Metabolic Panel,Routine,2026-06-26 04:34:27,115.4,In house - recollect
+Lakeside Regional,LR ED,LR30069007,400210713,CBC,STAT,2026-06-27 08:29:17,87.5,Discharged - cancel or follow up
+Mercy North,MN 4E Telemetry,MN30071511,400225388,CBC,Routine,2026-06-28 05:23:16,66.6,In house - recollect
+Mercy North,MN ED,MN30069059,400210870,CBC,STAT,2026-06-28 13:17:43,58.7,Discharged - cancel or follow up
+Mercy North,MN 3W Med/Surg,MN30069064,400210890,CBC,Routine,2026-06-29 05:02:36,43.0,Discharged - cancel or follow up
+Lakeside Regional,LR 3W Med/Surg,LR30071500,400225279,Basic Metabolic Panel,Routine,2026-06-29 05:24:45,42.6,In house - recollect
+Mercy North,MN 3W Med/Surg,MN30069385,400211727,Troponin I,STAT,2026-06-29 16:50:12,31.2,In house - recollect
+Mercy North,MN 4E Telemetry,MN30069392,400211745,Basic Metabolic Panel,STAT,2026-06-29 21:40:18,26.3,In house - recollect
