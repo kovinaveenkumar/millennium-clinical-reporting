@@ -6,7 +6,7 @@ Port to Oracle and prove the numbers match.
     python oracle/oracle_port.py load     # create tables in Oracle, copy rows from data/millennium.db
     python oracle/oracle_port.py run      # run oracle/reports_oracle.sql, reconcile with the SQLite reports
 
-Connection: env ORA_DSN (default localhost:1521/FREEPDB1), ORA_USER, ORA_PASSWORD.
+Connection: ORA_PASSWORD (required), ORA_USER (default millennium), ORA_DSN (default localhost:1521/FREEPDB1).
 Writes output/oracle_reconciliation.csv and output/oracle_explain_ed_throughput.txt.
 """
 import datetime as dt
@@ -32,9 +32,21 @@ KEYS = {"ed_throughput": ["facility"], "lab_tat": ["facility", "priority", "test
 
 
 def ora():
-    return oracledb.connect(user=os.environ.get("ORA_USER", "millennium"),
-                            password=os.environ.get("ORA_PASSWORD", "Millennium_2026"),   # local Docker dev default
-                            dsn=os.environ.get("ORA_DSN", "localhost:1521/FREEPDB1"))
+    user = os.environ.get("ORA_USER", "millennium")
+    dsn = os.environ.get("ORA_DSN", "localhost:1521/FREEPDB1")
+    password = os.environ.get("ORA_PASSWORD")
+    if not password:
+        sys.exit("Set ORA_PASSWORD to the APP_USER_PASSWORD you gave the Oracle container (see oracle/README.md).")
+    try:
+        return oracledb.connect(user=user, password=password, dsn=dsn)
+    except oracledb.Error as e:
+        msg = str(e).splitlines()[0]
+        if "ORA-01017" in msg:
+            sys.exit(f"Oracle rejected the login for {user}@{dsn}. Check ORA_USER / ORA_PASSWORD.")
+        if "DPY-6005" in msg or "DPY-6000" in msg:
+            sys.exit(f"Could not reach Oracle at {dsn}. Is the container running (docker ps)? "
+                     "A fresh container needs about 30 seconds before it accepts logins.")
+        sys.exit(f"Could not connect to Oracle at {dsn}: {msg}")
 
 
 def to_dt(v):
@@ -83,7 +95,12 @@ def run_and_reconcile():
     for name, sql in load_oracle_queries().items():
         used = {k: v for k, v in params.items() if f":{k}" in sql}
         t0 = time.perf_counter()
-        cur.execute(sql, used)
+        try:
+            cur.execute(sql, used)
+        except oracledb.DatabaseError as e:
+            if "ORA-00942" in str(e):
+                sys.exit("The tables don't exist in Oracle yet. Run: python oracle/oracle_port.py load")
+            raise
         o = pd.DataFrame(cur.fetchall(), columns=[d[0].lower() for d in cur.description])
         secs = time.perf_counter() - t0
         s = run(name, p, lite)
@@ -112,4 +129,7 @@ def run_and_reconcile():
 
 
 if __name__ == "__main__":
-    {"load": load, "run": run_and_reconcile}[sys.argv[1] if len(sys.argv) > 1 else "run"]()
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
+    if cmd not in ("load", "run"):
+        sys.exit("usage: python oracle/oracle_port.py [load|run]")
+    load() if cmd == "load" else run_and_reconcile()

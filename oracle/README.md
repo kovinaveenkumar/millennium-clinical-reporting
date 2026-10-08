@@ -4,15 +4,14 @@ Millennium runs on Oracle, so I ported reports 01–05 to Oracle SQL ([`reports_
 
 ## Running it
 
-You need Docker. The image is Oracle Database 23ai Free.
+You need Docker, and the SQLite database built first (`./run_all.sh` or `python src/generate_data.py`). The image is Oracle Database 23ai Free. The `oracledb` driver is already in `requirements.txt`.
 
 ```bash
 docker run -d --name millennium-oracle -p 1521:1521 \
   -e ORACLE_PASSWORD=<admin password> -e APP_USER=millennium -e APP_USER_PASSWORD=<app password> \
   gvenzl/oracle-free:23-slim-faststart
 
-pip install oracledb
-export ORA_PASSWORD=<app password>     # ORA_USER and ORA_DSN default to millennium and localhost:1521/FREEPDB1
+export ORA_PASSWORD=<app password>     # required; ORA_USER and ORA_DSN default to millennium and localhost:1521/FREEPDB1
 
 python oracle/oracle_port.py load      # creates the tables, copies 1.2M rows from SQLite, gathers stats (about 15 s)
 python oracle/oracle_port.py run       # runs the Oracle reports and compares them with SQLite
