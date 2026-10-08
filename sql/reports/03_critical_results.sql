@@ -31,7 +31,8 @@ WITH crit AS (
     AND (:facility_cd = 0 OR e.loc_facility_cd = :facility_cd)
 ),
 ranked AS (
-  SELECT *, ROW_NUMBER() OVER (PARTITION BY facility, nurse_unit ORDER BY notify_min) AS rn,
+  -- NULLS LAST: undocumented calls (NULL) must not take the first positions, or the median shifts
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY facility, nurse_unit ORDER BY notify_min NULLS LAST) AS rn,
             COUNT(notify_min) OVER (PARTITION BY facility, nurse_unit)              AS n
   FROM crit
 )

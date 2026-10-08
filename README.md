@@ -1,15 +1,15 @@
-# Millennium-Style Clinical Operations Reporting (SQL · CCL · HTML)
+# Millennium-Style Clinical Operations Reporting (SQL · Oracle · CCL · HTML)
 
 **Business question:** *Across a 3-hospital system, where are the throughput and patient-safety gaps in the ED, the lab and the nursing units? Which reports and alerts should operations leaders get every morning?*
 
 This project builds the whole reporting cycle a Cerner CCL/reporting analyst owns, on a schema modeled on **Cerner Millennium**:
 
 * **Data:** 13 tables structured like Millennium's (`ENCOUNTER`, `ENCNTR_LOC_HIST`, `ORDERS`, `ORDER_DETAIL`, versioned `CLINICAL_EVENT`, `CODE_VALUE`, …), filled with 6 months of synthetic data.
-* **Reports:** 7 KPI and operational reports in SQL, with CCL-style prompts.
+* **Reports:** 7 KPI and operational reports in SQL, with CCL-style prompts, **also ported to Oracle** (Millennium's database) and reconciled value for value.
 * **CCL:** the same reports as **CCL (Discern Explorer) programs**.
 * **HTML:** a filterable report page with alerts, and an MPage component fed by a CCL JSON driver.
 * **Discern rules:** a duplicate-order rule and a critical-result escalation rule, evaluated in silent mode.
-* **Validation, testing and docs:** 21 validation checks, 18 automated tests, 2 root-cause analyses, performance tuning, and release documentation.
+* **Validation, testing and docs:** 21 validation checks, 19 automated tests, 2 root-cause analyses, performance tuning, and release documentation.
 
 ![Operational KPI report page](assets/reports_page.png)
 *`output/reports.html`: prompt banner, validation badge, threshold alerts, KPI tiles, facility filter, sortable tables, CSV download for every query.*
@@ -42,14 +42,14 @@ This project builds the whole reporting cycle a Cerner CCL/reporting analyst own
 |---|---|
 | Cerner Millennium data architecture & tables | [`sql/schema.sql`](sql/schema.sql), [docs/data_model.md](docs/data_model.md): code sets, aliases, location history, order details, result versioning, and the 9 rules every report follows |
 | CCL programming | [`ccl/`](ccl): 7 report programs + MPage JSON driver + EKS logic program (prompts, `uar_get_code_by`, record structures, `outerjoin`, `parser`, `head/detail/foot`, `cnvtrectojson`) |
-| SQL | [`sql/reports/`](sql/reports): window functions, SQL medians, recursive CTE census, point-in-time joins, correlated `EXISTS`, self-joins |
+| SQL / Oracle | [`sql/reports/`](sql/reports): window functions, SQL medians, recursive CTE census, point-in-time joins, correlated `EXISTS`, self-joins. [`oracle/`](oracle): reports 01–05 in Oracle SQL (`MEDIAN`, `CONNECT BY`, `DATE` math, `DBMS_XPLAN`) on Oracle 23ai Free; **238/238 values match** SQLite |
 | HTML | [`output/reports.html`](output/reports.html) report page; [`mpage/ops_kpi.html`](mpage/ops_kpi.html) MPage component (XMLCclRequest → CCL JSON, with an off-domain fallback) |
 | KPI / operational reports | 7 reports, 13 queries, specs in [docs/report_specs.md](docs/report_specs.md) |
 | Discern Rules | [`rules/discern_rules.json`](rules/discern_rules.json), [`src/discern_rules.py`](src/discern_rules.py), [docs/discern_rules.md](docs/discern_rules.md): silent-mode firing volume, precision/recall, window recommendation |
 | Filtering, alerting | Facility/date prompts on every report; threshold alert banner; critical-result and open-order worklists |
-| Troubleshooting, RCA | [docs/rca.md](docs/rca.md): ED visits under-counted 19% (encounter-type filter); lab volume inflated 1.74× (result versions) |
+| Troubleshooting, RCA | [docs/rca.md](docs/rca.md): ED visits under-counted 19% (encounter-type filter); lab volume inflated 1.74× (result versions). The Oracle reconciliation also caught a NULL-ordering median bug ([oracle/README.md](oracle/README.md)) |
 | Database querying / tuning | [docs/performance_tuning.md](docs/performance_tuning.md): sargable dates (8×), explain-plan index fix (2.9 s → 0.08 s), one-pass census rewrite (4×) |
-| Validation / testing / deployment / documentation | [docs/test_plan.md](docs/test_plan.md) (21 checks + 18 tests), [docs/release_runbook.md](docs/release_runbook.md) (DEV → CERT → PROD, ops jobs, silent-mode rules) |
+| Validation / testing / deployment / documentation | [docs/test_plan.md](docs/test_plan.md) (21 checks + 19 tests), [docs/release_runbook.md](docs/release_runbook.md) (DEV → CERT → PROD, ops jobs, silent-mode rules) |
 
 ## ⚠ What is real and what is assumed
 * **All data is synthetic** ([`src/generate_data.py`](src/generate_data.py), fixed seed). No real patients, providers or facilities. Volumes are realistic in size: 72K encounters, 62K patients, 227K orders, 414K result rows, 84K location segments.
@@ -68,6 +68,7 @@ This project builds the whole reporting cycle a Cerner CCL/reporting analyst own
 | [`src/`](src) | `generate_data.py`, `report_runner.py` (prompt binding), `validate.py`, `discern_rules.py`, `build_html.py`, `make_charts.py`, `rca.py`, `tune.py` |
 | [`ccl/`](ccl) | CCL programs |
 | [`mpage/`](mpage) | HTML/JS MPage component |
+| [`oracle/`](oracle) | Oracle DDL, Oracle versions of reports 01–05, loader + cell-by-cell reconciliation |
 | [`tests/`](tests) | pytest: independent pandas re-computation, prompts, exclusions, RCA regressions, rule logic |
 | [`output/`](output) | `reports.html`, `csv/` (every query), `mpage_payload.json`, validation / perf / rule results |
 | [`docs/`](docs) | data model, report specs, RCA, tuning, Discern rules, test plan, release runbook, interview prep |
@@ -84,7 +85,7 @@ python src/report_runner.py --start 2026-04-01 --end 2026-06-30 --facility "Merc
 ```
 
 ## Limitations / next steps
-* Port the schema and reports to **Oracle** (Millennium's database), e.g. Oracle Database Free in Docker, and swap SQLite date math for Oracle `DATE` arithmetic.
+* Port reports 06–08 to Oracle too (01–05 are done: [oracle/README.md](oracle/README.md)).
 * Compile and run the CCL in a real domain; build a Discern Explorer layout (DVDev Layout Builder) version of one report.
 * Readmissions are not risk-adjusted and do not exclude planned readmissions (the CMS measure does both).
 * Add a BusinessObjects/DA2-style semantic layer (business-friendly views over the base tables).

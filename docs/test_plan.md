@@ -18,13 +18,14 @@ Results: `output/validation_results.csv`.
 | Control total | lab TAT orders: report = source count | 204,468 | 204,468 |
 | Control total | test-patient FINs in the critical worklist (30 test encounters exist) | 0 | 0 |
 
-## 2. Unit / regression tests: `pytest`, 18 pass
+## 2. Unit / regression tests: `pytest`, 19 pass
 
 | Test | What it proves |
 |---|---|
 | `test_ed_throughput_matches_pandas` | visits, both medians and % over 4 h re-computed independently in pandas, for every facility |
 | `test_lab_tat_matches_pandas` | every facility × priority × test cell: orders, median, % within target |
 | `test_readmissions_match_pandas` | index discharges and readmissions per facility |
+| `test_critical_compliance_matches_pandas` | counts, % within 30 min and median minutes per unit (added after the Oracle reconciliation caught a median bug) |
 | `test_facility_prompt_partitions_total` (×4) | facility prompt splits the total exactly |
 | `test_date_prompt_months_add_up` | six monthly runs add up to the half-year run (no boundary double-counting) |
 | `test_unknown_facility_prompt_is_rejected` | bad prompt value raises an error instead of returning "all" |
@@ -40,3 +41,6 @@ Results: `output/validation_results.csv`.
 * Compare totals with an existing trusted report or source system (LIS volume, ED tracking board).
 * Run the CCL in the CERT domain with a small date range and `maxrec`, then the full range. Compare the output with the SQL version.
 * Get user acceptance from the requester on a real week of data before the production move.
+
+## 4. Cross-database reconciliation: `python oracle/oracle_port.py run`
+Reports 01–05 run on Oracle 23ai Free and are compared value by value with the SQLite output: **238 / 238 match** ([oracle/README.md](../oracle/README.md)).

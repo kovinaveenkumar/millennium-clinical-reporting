@@ -2,3 +2,4 @@ pandas>=2.2
 numpy>=1.26
 matplotlib>=3.8
 pytest>=8
+oracledb>=2.0   # optional: only for oracle/oracle_port.py

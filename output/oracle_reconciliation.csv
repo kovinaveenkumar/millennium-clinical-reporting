@@ -1,0 +1,6 @@
+report,rows_sqlite,rows_oracle,rows_unmatched,cells_compared,cells_different,max_abs_diff,oracle_seconds
+ed_throughput,3,3,0,21,0,0.0,0.17
+lab_tat,21,21,0,84,0,0.0,0.65
+critical_compliance,14,14,0,70,0,0.0,0.1
+readmit_by_facility,3,3,0,9,0,0.0,0.05
+census_summary,9,9,0,54,0,0.0,0.12

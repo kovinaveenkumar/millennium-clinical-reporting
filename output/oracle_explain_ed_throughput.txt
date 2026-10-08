@@ -1,0 +1,62 @@
+Plan hash value: 4086604696
+ 
+-------------------------------------------------------------------------------------
+| Id  | Operation                                      | Name               | Rows  |
+-------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                               |                    |     2 |
+|   1 |  SORT ORDER BY                                 |                    |     2 |
+|   2 |   SORT GROUP BY                                |                    |     2 |
+|   3 |    VIEW                                        | VW_ORE_095406CC    |    69 |
+|   4 |     UNION-ALL                                  |                    |    69 |
+|   5 |      NESTED LOOPS                              |                    |    52 |
+|   6 |       NESTED LOOPS                             |                    |    52 |
+|   7 |        HASH JOIN                               |                    |    52 |
+|   8 |         HASH JOIN OUTER                        |                    |    52 |
+|   9 |          NESTED LOOPS                          |                    |    52 |
+|  10 |           MERGE JOIN                           |                    |    90 |
+|  11 |            TABLE ACCESS BY INDEX ROWID         | CODE_VALUE         |    63 |
+|  12 |             INDEX FULL SCAN                    | SYS_C008723        |    63 |
+|  13 |            SORT JOIN                           |                    |    90 |
+|  14 |             TABLE ACCESS BY INDEX ROWID BATCHED| ENCOUNTER          |    90 |
+|  15 |              INDEX RANGE SCAN                  | XIE_ENC_ARRIVE     |   323 |
+|  16 |           VIEW PUSHED PREDICATE                |                    |     1 |
+|  17 |            WINDOW BUFFER                       |                    |     1 |
+|  18 |             FILTER                             |                    |       |
+|  19 |              TABLE ACCESS BY INDEX ROWID       | ENCNTR_LOC_HIST    |     1 |
+|  20 |               INDEX RANGE SCAN                 | XIE_ELH_ENCNTR     |     1 |
+|  21 |          VIEW                                  | index$_join$_034   |    63 |
+|  22 |           HASH JOIN                            |                    |       |
+|  23 |            INDEX FAST FULL SCAN                | SYS_C008723        |    63 |
+|  24 |            INDEX FAST FULL SCAN                | XIE_CV_SET_MEANING |    63 |
+|  25 |         VIEW                                   | index$_join$_032   |    63 |
+|  26 |          HASH JOIN                             |                    |       |
+|  27 |           INDEX FAST FULL SCAN                 | SYS_C008723        |    63 |
+|  28 |           INDEX FAST FULL SCAN                 | XIE_CV_SET_MEANING |    63 |
+|  29 |        INDEX UNIQUE SCAN                       | SYS_C008728        |     1 |
+|  30 |       TABLE ACCESS BY INDEX ROWID              | PERSON             |     1 |
+|  31 |      NESTED LOOPS                              |                    |    17 |
+|  32 |       NESTED LOOPS                             |                    |    17 |
+|  33 |        HASH JOIN                               |                    |    17 |
+|  34 |         HASH JOIN OUTER                        |                    |    17 |
+|  35 |          NESTED LOOPS                          |                    |    17 |
+|  36 |           NESTED LOOPS                         |                    |    30 |
+|  37 |            TABLE ACCESS BY INDEX ROWID         | CODE_VALUE         |     1 |
+|  38 |             INDEX UNIQUE SCAN                  | SYS_C008723        |     1 |
+|  39 |            TABLE ACCESS BY INDEX ROWID BATCHED | ENCOUNTER          |    30 |
+|  40 |             INDEX RANGE SCAN                   | XIE_ENC_ARRIVE     |   108 |
+|  41 |           VIEW PUSHED PREDICATE                |                    |     1 |
+|  42 |            WINDOW BUFFER                       |                    |     1 |
+|  43 |             FILTER                             |                    |       |
+|  44 |              TABLE ACCESS BY INDEX ROWID       | ENCNTR_LOC_HIST    |     1 |
+|  45 |               INDEX RANGE SCAN                 | XIE_ELH_ENCNTR     |     1 |
+|  46 |          VIEW                                  | index$_join$_041   |    63 |
+|  47 |           HASH JOIN                            |                    |       |
+|  48 |            INDEX FAST FULL SCAN                | SYS_C008723        |    63 |
+|  49 |            INDEX FAST FULL SCAN                | XIE_CV_SET_MEANING |    63 |
+|  50 |         VIEW                                   | index$_join$_039   |    63 |
+|  51 |          HASH JOIN                             |                    |       |
+|  52 |           INDEX FAST FULL SCAN                 | SYS_C008723        |    63 |
+|  53 |           INDEX FAST FULL SCAN                 | XIE_CV_SET_MEANING |    63 |
+|  54 |        INDEX UNIQUE SCAN                       | SYS_C008728        |     1 |
+|  55 |       TABLE ACCESS BY INDEX ROWID              | PERSON             |     1 |
+-------------------------------------------------------------------------------------

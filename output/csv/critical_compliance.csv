@@ -1,15 +1,15 @@
 facility,nurse_unit,critical_results,notified_30min,not_documented,pct_within_30,median_notify_min
 Mercy North,MN Outpatient Lab,2,1,0,50.0,25.0
-Mercy North,MN 4E Telemetry,137,77,15,56.2,20.0
-Lakeside Regional,LR ICU,54,45,4,83.3,10.0
-Mercy North,MN 3W Med/Surg,284,242,19,85.2,9.0
-Mercy South,MS 3W Med/Surg,295,258,15,87.5,10.0
-Lakeside Regional,LR 3W Med/Surg,205,180,12,87.8,10.0
+Mercy North,MN 4E Telemetry,137,77,15,56.2,25.0
+Lakeside Regional,LR ICU,54,45,4,83.3,12.0
+Mercy North,MN 3W Med/Surg,284,242,19,85.2,10.0
+Mercy South,MS 3W Med/Surg,295,258,15,87.5,11.0
+Lakeside Regional,LR 3W Med/Surg,205,180,12,87.8,11.0
 Mercy South,MS 4E Telemetry,147,131,3,89.1,10.0
 Lakeside Regional,LR 4E Telemetry,108,97,5,89.8,10.0
 Mercy South,MS ICU,83,77,1,92.8,9.0
-Mercy North,MN ED,780,728,16,93.3,8.0
+Mercy North,MN ED,780,728,16,93.3,9.0
 Mercy South,MS ED,954,890,25,93.3,9.0
-Lakeside Regional,LR ED,607,569,16,93.7,8.0
+Lakeside Regional,LR ED,607,569,16,93.7,9.0
 Mercy North,MN ICU,76,72,2,94.7,11.0
 Lakeside Regional,LR Outpatient Lab,2,2,0,100.0,14.0

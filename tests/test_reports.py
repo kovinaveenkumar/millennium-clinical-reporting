@@ -101,6 +101,37 @@ def test_readmissions_match_pandas(con, raw):
         assert rpt.loc[f, "readmits_30d"] == g.readmit.sum()
 
 
+def test_critical_compliance_matches_pandas(con):
+    """Includes the median: a NULL-ordering bug here was caught by the Oracle reconciliation."""
+    c = pd.read_sql_query("""
+        SELECT ce.clinical_event_id, ce.encntr_id, ce.verified_dt_tm, fac.display AS facility, unit.display AS nurse_unit
+        FROM clinical_event ce
+        JOIN code_value nrm ON nrm.code_value = ce.normalcy_cd AND nrm.cdf_meaning = 'CRITICAL'
+        JOIN code_value rs ON rs.code_value = ce.result_status_cd AND rs.cdf_meaning IN ('AUTH', 'MODIFIED')
+        JOIN encounter e ON e.encntr_id = ce.encntr_id AND e.active_ind = 1
+        JOIN person p ON p.person_id = ce.person_id AND p.name_last_key NOT LIKE 'ZZTEST%'
+        JOIN code_value fac ON fac.code_value = e.loc_facility_cd
+        JOIN encntr_loc_hist h ON h.encntr_id = ce.encntr_id AND h.active_ind = 1
+             AND h.beg_effective_dt_tm <= ce.verified_dt_tm AND h.end_effective_dt_tm > ce.verified_dt_tm
+        JOIN code_value unit ON unit.code_value = h.loc_nurse_unit_cd
+        WHERE ce.valid_until_dt_tm > ? AND ce.verified_dt_tm >= '2026-01-01' AND ce.verified_dt_tm < '2026-07-01'""",
+                          con, params=(AS_OF,))
+    n = pd.read_sql_query("""SELECT n.encntr_id, n.event_end_dt_tm FROM clinical_event n JOIN code_value nc
+        ON nc.code_value = n.event_cd AND nc.display = 'Critical Result Notification' WHERE n.valid_until_dt_tm > ?""",
+                          con, params=(AS_OF,))
+    m = c.merge(n, on="encntr_id", how="left")
+    m["gap"] = (pd.to_datetime(m.event_end_dt_tm) - pd.to_datetime(m.verified_dt_tm)).dt.total_seconds() / 60
+    m.loc[(m.gap < 0) | (m.gap > 360), "gap"] = None
+    first = m.groupby(["clinical_event_id", "facility", "nurse_unit"]).gap.min().reset_index()
+    rpt = run("critical_compliance", Prompts(), con).set_index(["facility", "nurse_unit"])
+    for key, g in first.groupby(["facility", "nurse_unit"]):
+        assert rpt.loc[key, "critical_results"] == len(g)
+        assert rpt.loc[key, "notified_30min"] == (g.gap <= 30).sum()
+        assert rpt.loc[key, "not_documented"] == g.gap.isna().sum()
+        if g.gap.notna().any():
+            assert rpt.loc[key, "median_notify_min"] == round(g.gap.median())
+
+
 # ---------------------------------------------------------------- prompts & exclusions
 @pytest.mark.parametrize("name,col", [("ed_throughput", "ed_visits"), ("critical_compliance", "critical_results"),
                                       ("duplicate_orders", "orders"), ("open_orders_summary", "open_over_24h")])

@@ -8,12 +8,13 @@
 --           (valid_until_dt_tm > :as_of AND result_status <> INERROR).
 --           A corrected result keeps its original verification time: using the current
 --           row's verified_dt_tm would add the correction delay to TAT (docs/rca_lab_tat.md).
---           Targets: STAT <= 60 min, Routine <= 240 min.
+--           Targets: STAT <= 60 min, Routine <= 240 min. TAT is computed from whole seconds so an
+--           order at exactly 60:00 is counted the same way in SQLite and Oracle (no float rounding).
 -- =====================================================================
 -- name: lab_tat
 WITH ord AS (
   SELECT o.order_id, fac.display AS facility, cat.display AS test, od.oe_field_display_value AS priority,
-         (julianday(MIN(ce.verified_dt_tm)) - julianday(o.orig_order_dt_tm)) * 1440 AS tat_min
+         (strftime('%s', MIN(ce.verified_dt_tm)) - strftime('%s', o.orig_order_dt_tm)) / 60.0 AS tat_min
   FROM orders o
   JOIN code_value st     ON st.code_value = o.order_status_cd AND st.cdf_meaning = 'COMPLETED'
   JOIN code_value cat    ON cat.code_value = o.catalog_cd
@@ -48,7 +49,7 @@ ORDER BY priority DESC, pct_within_target;
 -- name: lab_tat_stat_by_hour
 WITH ord AS (
   SELECT o.order_id, fac.display AS facility, CAST(strftime('%H', o.orig_order_dt_tm) AS INTEGER) AS order_hour,
-         (julianday(MIN(ce.verified_dt_tm)) - julianday(o.orig_order_dt_tm)) * 1440 AS tat_min
+         (strftime('%s', MIN(ce.verified_dt_tm)) - strftime('%s', o.orig_order_dt_tm)) / 60.0 AS tat_min
   FROM orders o
   JOIN code_value st     ON st.code_value = o.order_status_cd AND st.cdf_meaning = 'COMPLETED'
   JOIN order_detail od   ON od.order_id = o.order_id AND od.oe_field_meaning = 'COLLPRI'
