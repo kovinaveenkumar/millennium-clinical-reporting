@@ -101,6 +101,7 @@ The Oracle steps are in [oracle/README.md](oracle/README.md). They need Docker.
 
 ## Documentation
 
+- **[Case study](docs/case_study.md)**: the whole project start to finish: objective, approach, problems I hit and how I fixed them, results and lessons ([PDF](docs/case_study.pdf))
 - [Data model](docs/data_model.md): the tables, code sets, and the rules every report follows
 - [Report specifications](docs/report_specs.md): what each report answers and how it's calculated
 - [Root-cause analysis](docs/rca.md): the two report bugs
