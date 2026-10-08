@@ -1,26 +1,42 @@
-# Discern rules: silent-mode evaluation
+# Discern rules and silent-mode testing
 
-Two rules are defined in [`rules/discern_rules.json`](../rules/discern_rules.json) using the Discern Expert structure: **EVOKE** (trigger), **LOGIC** (conditions) and **ACTION** (what the user sees). [`src/discern_rules.py`](../src/discern_rules.py) replays six months of orders and results through the logic in **silent mode**: every time the logic is true it writes a row to `EKS_MODULE_AUDIT`, and nobody is alerted. That is the usual way to measure a rule before turning it on: how often will it fire, and how often will it be right?
+Both rules are defined in [`rules/discern_rules.json`](../rules/discern_rules.json) using the usual Discern Expert layout: what triggers the rule (evoke), the conditions it checks (logic), and what the user sees (action).
 
-The logic for the duplicate-order rule also exists as an EKS-callable CCL program, [`ccl/cust_eks_dup_lab_order.prg`](../ccl/cust_eks_dup_lab_order.prg). It sets `retval = 100` for true and fills `log_message`, so the rule can run it through the EKS_EXEC_CCL_L template.
+Before turning a rule on, I want to know two things: how often it will fire, and how often it will be right. So `src/discern_rules.py` replays six months of orders and results through each rule in **silent mode**. Every firing is logged to EKS_MODULE_AUDIT, but nobody gets an alert.
 
-| Rule | Evoke | Logic | Action (in production) |
-|---|---|---|---|
-| `CUST_LAB_DUP_ORDER` | Lab order signed | Same orderable on this encounter within N min, and that earlier order not cancelled at sign time | Interruptive alert: cancel the new order, or keep it with a reason |
-| `CUST_CRIT_LAB_ESCALATE` | 30 min after a critical lab result verifies | No "Critical Result Notification" documented on the encounter since verification | Message to the unit's charge nurse pool, plus a task |
+The duplicate-order logic is also written as a CCL program, [`ccl/cust_eks_dup_lab_order.prg`](../ccl/cust_eks_dup_lab_order.prg), that the rule can call through the EKS_EXEC_CCL_L template. It returns `retval = 100` when the condition is true and puts the details in `log_message`.
 
-## Projected volume (silent mode, Jan–Jun 2026)
+## The two rules
+
+**CUST_LAB_DUP_ORDER: duplicate lab order**
+- **Fires when:** a lab order is signed.
+- **Checks:** whether the same test was already ordered on this encounter within N minutes, and that earlier order hadn't been cancelled.
+- **Shows:** an interruptive alert. The provider either cancels the new order or keeps it and gives a reason.
+
+**CUST_CRIT_LAB_ESCALATE: critical result not called**
+- **Fires when:** 30 minutes have passed since a critical lab result was verified.
+- **Checks:** whether a critical-result call has been documented on the encounter yet.
+- **Shows:** a message to the charge nurse pool for the patient's unit, plus a task.
+
+## Expected volume
+
+Silent mode, January–June 2026:
 
 | Rule | Mercy North | Mercy South | Lakeside Regional |
 |---|---|---|---|
-| CUST_LAB_DUP_ORDER (120-min window as requested) | 3,657 (20.2/day) | 1,270 (7.0/day) | 818 (4.5/day) |
-| CUST_CRIT_LAB_ESCALATE | 179 (1.0/day) | 154 (0.9/day) | 96 (0.5/day) |
+| Duplicate order (120-min window, as requested) | 3,657 (20.2 a day) | 1,270 (7.0 a day) | 818 (4.5 a day) |
+| Critical-result escalation | 179 (1.0 a day) | 154 (0.9 a day) | 96 (0.5 a day) |
 
-## Choosing the duplicate-order window
+## Choosing the look-back window
 
-The lab committee asked for a 120-minute window. Some fast repeats are intended, though: a repeat lactate at 1.5–3 h for sepsis, a recheck BMP after potassium replacement, and a serial troponin at ~3 h. An interruptive alert on those trains clinicians to click through, which is alert fatigue. Replaying the rule at several windows against the generator's ground truth gives:
+The lab committee asked for 120 minutes. But some repeat orders inside that window are deliberate:
+- a repeat lactate 1.5 to 3 hours later for sepsis
+- a BMP recheck after potassium replacement
+- serial troponins about 3 hours apart
 
-| Window (min) | Firings | True duplicates | Intended repeats (false alerts) | Precision | Recall |
+Firing an interruptive alert on those is how alert fatigue starts: people learn to click through. So I ran the rule at several window sizes and compared the firings with the orders I knew were real duplicates.
+
+| Window (min) | Firings | Real duplicates | Intended repeats (false alerts) | Precision | Recall |
 |---|---|---|---|---|---|
 | 30 | 3,737 | 3,735 | 2 | 99.9% | 72.0% |
 | **60** | **5,221** | **5,150** | **71** | **98.6%** | **99.3%** |
@@ -28,8 +44,13 @@ The lab committee asked for a 120-minute window. Some fast repeats are intended,
 | 240 | 8,364 | 5,150 | 3,214 | 61.6% | 99.3% |
 | 1,440 | 43,362 | 5,155 | 38,207 | 11.9% | 99.4% |
 
-![window sensitivity](../assets/06_rule_window_sensitivity.png)
+![Window comparison](../assets/06_rule_window_sensitivity.png)
 
-**Recommendation.** Go live with **60 minutes**. It catches the same true duplicates as 120 minutes with **14× fewer false alerts** (71 vs 993). Go-live plan: keep silent mode for 2 more weeks in production, review the audit weekly, then move to production at Mercy North first, since that facility has 3× the duplicate rate of the others.
+**My recommendation: 60 minutes.** It catches the same real duplicates as 120 minutes, with 71 false alerts instead of 993.
 
-*Caveat:* precision and recall can be measured here only because the data generator records which orders were accidental duplicates (`zz_truth_dup_order`). In a live domain, the same table would be built by chart review of a sample of firings.
+For go-live, I'd do three things:
+1. Leave the rule in silent mode in production for another two weeks and review the audit table each week.
+2. Turn it on at Mercy North first, since it has three times the duplicate rate of the other two hospitals.
+3. Roll it out to the other two after that.
+
+**One caveat.** I can only measure precision and recall here because the generator records which orders were accidental duplicates (the `zz_truth_dup_order` table). In a live system you'd get the same answer by chart-reviewing a sample of the firings.

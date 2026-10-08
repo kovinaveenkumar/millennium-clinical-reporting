@@ -3,7 +3,7 @@ Generate a synthetic Millennium-style database (data/millennium.db). No real pat
 
 Three hospitals, 1 Jan - 30 Jun 2026 (+ 2-week warm-up in Dec 2025 so the census and
 readmission look-backs are not empty on day 1). Patterns are planted on purpose so the
-reports have something to find (see README "What is real and what is assumed"):
+reports have something to find (see "About the data and the CCL" in the README):
   * Lakeside Regional: tight inpatient beds -> long ED boarding for admitted patients
   * Mercy South: slow STAT lab turnaround on night shift; higher 30-day readmissions
   * Mercy North: more accidental duplicate lab orders; slow critical-result calls on Telemetry

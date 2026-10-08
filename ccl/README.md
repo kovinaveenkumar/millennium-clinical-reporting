@@ -1,30 +1,35 @@
-# CCL (Discern Explorer) programs
+# CCL programs
 
-> **Honesty note:** these programs are written in CCL syntax and follow Cerner conventions, but they have **not been compiled or run**. There is no public Millennium domain. The same logic *is* run and tested as SQL in `sql/reports/` (each program header names its SQL twin). Expect small syntax fixes on first compile in a real domain.
+These are the CCL (Discern Explorer) versions of the reports in `sql/reports/`. The header of each program names the SQL file it matches.
 
-| Program | Report | CCL techniques shown |
+**Status:** I haven't compiled these yet, because I don't have access to a Millennium domain. The logic is the same as the SQL versions, which are run and tested, and I followed standard Cerner conventions throughout. I'd expect to fix a few syntax details on the first compile.
+
+| Program | Report | What it uses |
 |---|---|---|
-| `cust_rpt_ed_throughput.prg` | 01 ED throughput | prompts, `uar_get_code_by`, `parser()` optional filter, record structure, head/detail/foot, subroutine (median), `dummyt` output |
-| `cust_rpt_lab_tat.prg` | 02 Lab TAT | two-pass: collect per order (`head o.order_id` = first verification), then aggregate; `alterlist` in blocks of 1,000 |
-| `cust_rpt_crit_result_calls.prg` | 03 Critical calls | `outerjoin()` (the notification may not exist), point-in-time location join, summary vs detail prompt |
-| `cust_rpt_readmit_30d.prg` | 04 Readmissions | prompt validation with `go to exit_script`, `cnvtlookahead("30,D", …)`, outer self-join |
-| `cust_rpt_midnight_census.prg` | 05 Census | nested record (unit → day), one pass over segments with a `while` loop, `dummyt` × `dummyt` output |
-| `cust_rpt_open_lab_orders.prg` | 06 Open orders | worklist output for an Operations job, `evaluate2` |
-| `cust_rpt_dup_lab_orders.prg` | 07 Duplicates | self-join of ORDERS with a prompt-driven `cnvtlookbehind` window |
-| `cust_ops_kpi_mp.prg` | MPage driver | `locateval`, `cnvtrectojson`, `_memory_reply_string` for `mpage/ops_kpi.html` |
-| `cust_eks_dup_lab_order.prg` | Discern rule logic | EKS-callable CCL: `link_encntrid` / `link_orderid` in, `retval` / `log_message` / `log_misc1` out |
+| `cust_rpt_ed_throughput.prg` | 01 ED throughput | prompts, `uar_get_code_by`, `parser()` for the optional facility filter, a record structure, head/detail/foot, a subroutine for the median, output through `dummyt` |
+| `cust_rpt_lab_tat.prg` | 02 Lab turnaround | two passes: first collect one row per order (`head o.order_id` picks up the first verification), then summarize; `alterlist` grown in blocks of 1,000 |
+| `cust_rpt_crit_result_calls.prg` | 03 Critical result calls | `outerjoin()` because the call may not have been documented, a point-in-time location join, a prompt to choose summary or worklist |
+| `cust_rpt_readmit_30d.prg` | 04 Readmissions | checks the prompt and exits early (`go to exit_script`) if the date range is too recent, `cnvtlookahead("30,D", ...)`, an outer self-join |
+| `cust_rpt_midnight_census.prg` | 05 Census | a nested record (unit, then day), a single pass over location history with a `while` loop |
+| `cust_rpt_open_lab_orders.prg` | 06 Open orders | a worklist meant to run as a scheduled ops job, `evaluate2` |
+| `cust_rpt_dup_lab_orders.prg` | 07 Duplicates | a self-join on ORDERS, with the look-back window taken from a prompt through `cnvtlookbehind` |
+| `cust_ops_kpi_mp.prg` | MPage driver | `locateval`, `cnvtrectojson`, returns JSON through `_memory_reply_string` to `mpage/ops_kpi.html` |
+| `cust_eks_dup_lab_order.prg` | Rule logic | called from a Discern rule: takes `link_encntrid` and `link_orderid`, sets `retval`, `log_message` and `log_misc1` |
 
-## Running in a domain (DiscernVisualDeveloper or CCL command line)
+## Running one
+
 ```
 ; compile
 %i ccluserdir:cust_rpt_ed_throughput.prg
-; run: output to screen, Jan-Jun 2026, all facilities
+
+; run to screen for January–June 2026, all facilities
 cust_rpt_ed_throughput "MINE", "01-JAN-2026 00:00:00", "30-JUN-2026 23:59:59", 0.0 go
 ```
 
-## Conventions used
-* Header block with purpose, SQL twin, prompts, and a mod log.
-* Code values come from `cdf_meaning` / `display_key` through `uar_get_code_by`, declared once as constants. No hard-coded numbers.
-* The driver table (`plan`) is qualified on an indexed date range first. Each `join` follows a key.
-* `with protect` on declares and records. `nocounter` on every select. `"nl:"` for selects that only fill records.
-* Optional prompt filters use `parser()`, not `(col = $X or $X = 0)`, so the indexed column stays bare.
+## Conventions
+
+- Every program has a header with its purpose, its matching SQL file, its prompts and a mod log.
+- Code values are looked up by meaning or display key with `uar_get_code_by`, once, as constants. There are no hard-coded numbers.
+- The `plan` is driven by an indexed date range, and each `join` follows a key.
+- Declares and records use `with protect`. Every select uses `nocounter`. Selects that only fill a record go to `"nl:"`.
+- Optional prompt filters use `parser()` rather than `(col = $X or $X = 0)`, so the indexed column isn't wrapped in an OR. Oracle's plan for the SQL version shows why: it splits that OR into two separate branches.

@@ -1,40 +1,41 @@
-# Data model: Millennium-style tables used by the reports
+# Data model
 
-The schema ([`sql/schema.sql`](../sql/schema.sql)) uses Cerner Millennium's table and column names. It is simplified: the real tables have many more columns, and real sites add their own custom tables. Everything here is synthetic.
+The schema in [`sql/schema.sql`](../sql/schema.sql) uses Millennium's table and column names, so the SQL reads the same way it would against a real domain. It's a cut-down version: Millennium's tables have many more columns than I needed, and real sites add their own custom tables on top.
 
 ```mermaid
 erDiagram
     PERSON ||--o{ PERSON_ALIAS : "MRN"
     PERSON ||--o{ ENCOUNTER : has
     ENCOUNTER ||--o{ ENCNTR_ALIAS : "FIN"
-    ENCOUNTER ||--o{ ENCNTR_LOC_HIST : "ED -> unit -> unit"
+    ENCOUNTER ||--o{ ENCNTR_LOC_HIST : "location history"
     ENCOUNTER ||--o{ ORDERS : has
-    ORDERS ||--o{ ORDER_DETAIL : "priority (COLLPRI)"
+    ORDERS ||--o{ ORDER_DETAIL : "order entry fields"
     ORDERS ||--o{ ORDER_ACTION : "order / complete / cancel"
-    ORDERS ||--o{ CLINICAL_EVENT : "results (versioned)"
+    ORDERS ||--o{ CLINICAL_EVENT : "results"
     ENCOUNTER ||--o{ CLINICAL_EVENT : "documentation"
     PRSNL ||--o{ ORDER_ACTION : performs
-    CODE_VALUE ||--o{ ENCOUNTER : "*_cd columns"
     CODE_VALUE_SET ||--o{ CODE_VALUE : groups
     CUST_UNIT_CAPACITY }o--|| CODE_VALUE : "nurse unit"
     EKS_MODULE_AUDIT }o--|| ENCOUNTER : "rule firings"
 ```
 
-| Table | Grain | Used for |
+## Tables
+
+| Table | One row per | Used for |
 |---|---|---|
-| `CODE_VALUE` / `CODE_VALUE_SET` | one coded value | Every `*_cd` column. Join by `code_set` + `cdf_meaning` (or `uar_get_code_by` in CCL). Never hard-code the numeric `code_value`: it differs between domains. |
-| `PERSON`, `PERSON_ALIAS` | patient; MRN | `name_last_key` is used to exclude test patients. MRN is `person_alias_type_cd` = MRN (code set 4). |
-| `ENCOUNTER`, `ENCNTR_ALIAS` | visit; FIN | Type (71), facility (220), arrival / registration / inpatient admit / discharge times, disposition (19). FIN is code set 319. |
-| `ENCNTR_LOC_HIST` | one location segment | Where the patient was and when: ED length of stay, boarding, midnight census, and the unit at the time of a result. |
-| `ORDERS`, `ORDER_DETAIL`, `ORDER_ACTION` | order; order-entry field; action | Status (6004), orderable (200). **Priority is an order-entry field** (`oe_field_meaning = 'COLLPRI'`), not an ORDERS column. |
-| `CLINICAL_EVENT` | one *version* of a result or documented value | Lab results (with normal/critical flags), plus nurse documentation such as "Critical Result Notification". |
-| `PRSNL` | provider / staff | Ordering provider, nurse, lab tech. |
-| `CUST_UNIT_CAPACITY` | nurse unit | Site-maintained staffed beds (custom table, not Millennium). |
-| `EKS_MODULE_AUDIT` | rule firing | Written by the Discern rule simulator (silent mode). |
+| CODE_VALUE, CODE_VALUE_SET | coded value | Decoding every `*_cd` column. |
+| PERSON, PERSON_ALIAS | patient, MRN | Demographics, and screening out test patients. |
+| ENCOUNTER, ENCNTR_ALIAS | visit, FIN | Encounter type, facility, arrival / admit / discharge times, disposition. |
+| ENCNTR_LOC_HIST | stay in one location | ED length of stay, boarding, census, and where a patient was at a given moment. |
+| ORDERS, ORDER_DETAIL, ORDER_ACTION | order, order-entry field, action | Status, orderable, priority, and who did what and when. |
+| CLINICAL_EVENT | version of a result | Lab results with normal and critical flags, plus nursing documentation such as the critical-result call. |
+| PRSNL | staff member | Ordering provider, nurse, lab tech. |
+| CUST_UNIT_CAPACITY | nurse unit | Staffed beds. This is a custom table, the kind a site maintains itself. |
+| EKS_MODULE_AUDIT | rule firing | Written by the Discern rule simulator. |
 
-## Code sets used
+## Code sets I used
 
-| Code set | Meaning | Values used here (cdf_meaning) |
+| Code set | What it holds | Values (cdf_meaning) |
 |---|---|---|
 | 4 | Person alias type | MRN |
 | 8 | Result status | AUTH, MODIFIED, INERROR |
@@ -45,16 +46,20 @@ erDiagram
 | 200 | Order catalog | CBC, Basic Metabolic Panel, Troponin I, Lactate |
 | 220 | Location | FACILITY, NURSEUNIT, AMBULATORY |
 | 319 | Encounter alias type | FIN NBR |
-| 6000 / 6003 / 6004 | Catalog type / order action / order status | GENERAL LAB / ORDER, COMPLETE, CANCEL / ORDERED, COMPLETED, CANCELED |
+| 6000 | Catalog type | GENERAL LAB |
+| 6003 | Order action type | ORDER, COMPLETE, CANCEL |
+| 6004 | Order status | ORDERED, COMPLETED, CANCELED |
 
-## Rules every report follows (and why)
+## Rules I follow in every report
 
-1. **Current version only on CLINICAL_EVENT.** A correction ends the old row (`valid_until_dt_tm` = correction time) and inserts a new row with the same `event_id`. Current rows have `valid_until_dt_tm` = 31-Dec-2100. Without this filter a corrected result counts twice. That is [RCA incident 2](rca.md).
-2. **Exclude In Error results** (`result_status_cd` = INERROR).
-3. **`active_ind = 1`** on encounters, aliases and location rows. Cancelled registrations stay in the table with `active_ind = 0`.
-4. **Exclude test patients.** Every build has fake patients for testing; here they are `name_last_key LIKE 'ZZTEST%'`.
-5. **An ED visit is defined by ED arrival, not by `encntr_type_cd`.** When an ED patient is admitted, Millennium changes the same encounter's type to Inpatient. Qualifying on type = Emergency silently drops every admitted ED visit. That is [RCA incident 1](rca.md).
-6. **Point-in-time joins for location.** A patient's unit at a given moment comes from `ENCNTR_LOC_HIST` where `beg <= t < end`. `ENCOUNTER.loc_nurse_unit_cd` only holds the *last* unit.
-7. **Join codes by meaning.** Use `cdf_meaning`, or `display_key` for event codes. In CCL, use `uar_get_code_by("MEANING", set, "X")` once in a `declare`, not a CODE_VALUE join in every query.
-8. **`result_val` is text.** Convert it (`CAST` / `cnvtreal`) before any numeric comparison. DQ check `lab_result_not_numeric` guards this.
-9. **Open-ended dates.** "Still here" is a far-future date, not NULL, on `ENCNTR_LOC_HIST` and `CLINICAL_EVENT`. ENCOUNTER uses NULL `disch_dt_tm` for in-house patients.
+Most of these I learned by getting them wrong first.
+
+1. **Only use the current version of a result.** When a result is corrected, Millennium doesn't overwrite it. It closes the old row by setting `valid_until_dt_tm` to the correction time and inserts a new row with the same `event_id`. The current row has `valid_until_dt_tm` set to 31-Dec-2100. Forget this filter and every corrected result is counted twice. That was the second bug in [rca.md](rca.md).
+2. **Leave out results marked In Error.**
+3. **Filter on `active_ind = 1`.** A cancelled registration stays in the encounter table; it's just flagged inactive.
+4. **Leave out test patients.** Every build has fake patients that people use for testing. In this data their last name starts with ZZTEST.
+5. **Count ED visits by ED arrival, not by encounter type.** When an ED patient is admitted, their encounter type changes to Inpatient on the same `encntr_id`. Filtering on Emergency loses all of them. That was the first bug in [rca.md](rca.md).
+6. **Use location history to find where someone was.** `ENCOUNTER.loc_nurse_unit_cd` only holds the last unit. To find the unit at a specific time, join to ENCNTR_LOC_HIST where `beg_effective_dt_tm <= t < end_effective_dt_tm`.
+7. **Look codes up by meaning, never by number.** The numeric `code_value` is different in every domain. In SQL I join CODE_VALUE on `code_set` and `cdf_meaning`. In CCL I call `uar_get_code_by("MEANING", ...)` once at the top of the program.
+8. **Remember that `result_val` is text.** It has to be converted before any numeric comparison, and one of the data-quality checks makes sure it always can be.
+9. **Watch for open-ended dates.** "Still here" is stored as a far-future date on ENCNTR_LOC_HIST and CLINICAL_EVENT, but as a NULL discharge date on ENCOUNTER.

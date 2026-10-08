@@ -1,63 +1,59 @@
-# Root cause analysis: two report defects
+# Root-cause analysis: two report bugs
 
-Both defects are realistic mistakes that come from the Millennium data model, not from bad arithmetic. The defective versions are kept in [`sql/archive/`](../sql/archive), [`src/rca.py`](../src/rca.py) reproduces the numbers, and regression tests in [`tests/test_reports.py`](../tests/test_reports.py) stop them from coming back.
+Neither of these was an arithmetic mistake. Both came from misreading how Millennium stores data, which is exactly why they're easy to miss. I kept the broken queries in [`sql/archive/`](../sql/archive). `src/rca.py` reproduces the numbers below, and there's a regression test for each bug in `tests/test_reports.py`.
 
----
+## 1. The ED report was missing one in five visits
 
-## Incident 1: ED report missed one in five ED visits
+**What was reported.** The ED report showed far fewer visits than the ED tracking board, and the "over 4 hours" figure looked better than anyone believed.
 
-**Reported problem.** The ED director said the ED throughput report showed far fewer visits than the ED tracking board, and "% over 4 hours" looked too good.
+**How big the gap was** (January–June 2026):
 
-**Impact (Jan–Jun 2026, all facilities):**
-
-| Facility | ED visits, v1 | ED visits, v2 (fixed) | % over 4 h, v1 | % over 4 h, v2 |
+| Facility | Visits, first version | Visits, fixed | Over 4 h, first version | Over 4 h, fixed |
 |---|---|---|---|---|
-| Lakeside Regional | 10,365 | 12,977 | 32.0% | **48.3%** |
-| Mercy North | 14,384 | 17,850 | 23.8% | **35.7%** |
-| Mercy South | 16,540 | 20,419 | 27.7% | **40.2%** |
+| Lakeside Regional | 10,365 | 12,977 | 32.0% | 48.3% |
+| Mercy North | 14,384 | 17,850 | 23.8% | 35.7% |
+| Mercy South | 16,540 | 20,419 | 27.7% | 40.2% |
 | **Total** | **41,289** | **51,246** | | |
 
-v1 under-counted visits by **9,957 (19%)** and under-stated long stays by 12–16 points. The missing visits were the admitted patients, who have the longest ED stays. So the error hid exactly the boarding problem the report exists to show.
+The first version missed 9,957 visits, about 19%, and understated long stays by 12 to 16 points. The missing visits were the admitted patients, who have the longest stays. So the bug hid the exact problem the report was built to show.
 
-**Root cause.** v1 qualified ED visits with `encntr_type_cd = EMERGENCY`. When an ED patient is admitted, Millennium changes the type of the **same encounter** to Inpatient. Every admitted ED visit therefore failed the filter. v1 also measured LOS to `disch_dt_tm` (hospital discharge) rather than to leaving the ED.
+**Cause.** I filtered ED visits on `encntr_type_cd = EMERGENCY`. When an ED patient is admitted, Millennium changes the type on the same encounter to Inpatient, so every admitted ED visit failed the filter. I was also measuring length of stay to hospital discharge rather than to the time the patient left the ED.
 
-**How it was found.**
-1. Reconciled the v1 count against a raw count of encounters with an `arrive_dt_tm`. The gap was about 19%.
-2. Pulled 10 FINs that appear in the raw count but not in the report. All 10 were type Inpatient with an ED location segment first.
-3. Confirmed in `ENCNTR_LOC_HIST`: ED segment, then an inpatient unit, all on one `encntr_id`.
+**How I found it.**
+1. I counted encounters with an ED arrival time directly from the table. That came out about 19% higher than the report.
+2. I pulled ten FINs that were in the raw count but not in the report. All ten were Inpatient encounters.
+3. Their location history showed an ED stay first, then an inpatient unit, all on the same encounter.
 
-**Fix (v2).** Qualify on `arrive_dt_tm`. Measure ED LOS to the end of the first `ENCNTR_LOC_HIST` segment, and boarding from `inpatient_admit_dt_tm`.
+**Fix.** Count ED visits by `arrive_dt_tm`. Measure ED time to the end of the first location in ENCNTR_LOC_HIST, and boarding from `inpatient_admit_dt_tm`.
 
 **Prevention.**
-* Control-total check in `validate.py`: report visits = independent source count (runs before every publish).
-* Regression test `test_rca1_ed_visits_not_qualified_on_encounter_type`.
-* Data-model note added for all report writers ([data_model.md](data_model.md) rule 5).
+- `validate.py` now checks the report total against an independent count before anything is published.
+- A regression test fails if the encounter-type filter ever comes back.
+- The rule is written down in [data_model.md](data_model.md) (rule 5).
 
----
+## 2. The lab turnaround report counted corrected results twice
 
-## Incident 2: Lab TAT report double-counted corrected results
+**What was reported.** The lab director said the STAT volume on the report was much higher than the order count in the lab system.
 
-**Reported problem.** The lab director said the STAT volume on the TAT report did not match the lab system's order count. It was much higher.
+**How big the gap was** (STAT orders, January–June 2026):
 
-**Impact (STAT, Jan–Jun 2026):**
-
-| Facility | v1 "results" | v2 STAT orders | % within 60 min, v1 | % within 60 min, v2 |
+| Facility | "Results", first version | STAT orders, fixed | Within 60 min, first version | Within 60 min, fixed |
 |---|---|---|---|---|
 | Lakeside Regional | 46,392 | 26,764 | 80.3% | 81.6% |
 | Mercy North | 66,769 | 38,161 | 85.4% | 86.9% |
 | Mercy South | 74,326 | 42,757 | 69.7% | 70.7% |
 
-Volume was inflated **1.74×**, and compliance was understated by 1.0–1.5 points.
+Volume was inflated 1.74 times, and the on-time rate was understated by 1 to 1.5 points.
 
-**Root cause (four defects in one query).**
-1. It joined every `CLINICAL_EVENT` row. The data has 6,436 superseded result rows from corrections and In Error marks, so each corrected result counted twice.
-2. It had no result-status filter, so 1,563 In Error results were counted.
-3. It measured TAT to each row's `verified_dt_tm`. For the 4,873 corrected results, that is the *correction's* verification, a median **19.1 hours** after the original.
-4. It counted result components, not orders: a BMP is 2 results, a CBC 2.
+**Cause.** There were four problems in the same query:
+1. It joined every CLINICAL_EVENT row. The data has 6,436 older versions left behind by corrections and In Error marks, so a corrected result was counted twice.
+2. It didn't filter on result status, so 1,563 results marked In Error were included.
+3. It took turnaround from each row's own verification time. For the 4,873 corrected results, that's when the *correction* was verified, a median of 19.1 hours after the original result.
+4. It counted results instead of orders. A BMP or CBC produces two results, so each one counted twice.
 
-**Fix (v2).** One row per order. TAT = order to `MIN(verified_dt_tm)` across all versions (the first time a result was available). Keep only orders that still have a current (`valid_until_dt_tm` in the future), non-In-Error result.
+**Fix.** One row per order. Turnaround runs from the order to the earliest verification across all versions, which is when a result was first available. Only orders that still have a current, valid result are included.
 
 **Prevention.**
-* DQ checks `event_with_multiple_current_versions` and `broken_version_chain` (validate.py).
-* Control total: report orders = source count of completed orders with a current valid result.
-* Regression test `test_rca2_lab_tat_uses_current_versions_only`, plus an independent pandas re-computation of every TAT cell (`test_lab_tat_matches_pandas`).
+- Two data-quality checks: no result can have more than one current version, and every superseded row has to link to the version that replaced it.
+- A control total: the orders in the report must match an independent count from the source tables.
+- A regression test, plus a test that recalculates every cell of the report in pandas and compares.

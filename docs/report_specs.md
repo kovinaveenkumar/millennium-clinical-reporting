@@ -1,55 +1,76 @@
 # Report specifications
 
-Each report has a SQL version (`sql/reports/`, runnable) and a CCL version (`ccl/`, written in Discern Explorer syntax). All reports share the same prompts:
+I wrote a short spec for each report before building it: who's asking, what question it answers, and exactly how each number is calculated. Every report has a SQL version in `sql/reports/` and a CCL version in `ccl/`.
+
+## Prompts
+
+All the reports take the same prompts.
 
 | Prompt | SQL bind | CCL prompt | Notes |
 |---|---|---|---|
-| Output device | - | `OUTDEV` | MINE / printer / file |
-| Start / end date | `:start_dt`, `:end_dt` | `START_DT`, `END_DT` | Inclusive dates; the date column each report qualifies on is listed below |
-| Facility | `:facility_cd` (0 = all) | `FACILITY_CD` | Picked by display name in `report_runner.py` (like a prompt list box) |
-| Data cut | `:as_of` | `curdate, curtime3` | Decides which CLINICAL_EVENT rows are current |
+| Output device | | `OUTDEV` | MINE, a printer or a file |
+| Start and end date | `:start_dt`, `:end_dt` | `START_DT`, `END_DT` | Inclusive. Each report says which date it filters on. |
+| Facility | `:facility_cd` (0 = all) | `FACILITY_CD` | Chosen by name in `report_runner.py`, like a prompt list box |
+| Data cut-off | `:as_of` | current date/time | Decides which result rows are current |
 
-Common exclusions: test patients (`ZZTEST`), inactive rows, In Error results, and superseded result versions. See [data_model.md](data_model.md).
+Every report leaves out test patients, inactive rows, results marked In Error, and older versions of corrected results. [data_model.md](data_model.md) explains why.
 
----
+## 01 ED Throughput
 
-### 01 ED Throughput (KPI)
-* **Asked by:** ED operations director. **Question:** how long do patients spend in our EDs, and how much of it is waiting for an inpatient bed?
-* **Qualifies on:** `arrive_dt_tm`. **Grain:** facility.
-* **Measures:** ED visits; LWBS % (disposition = Left Without Being Seen); admit %; median ED length of stay for discharged and for admitted patients (arrival to end of the first location segment); median boarding (admit decision to leaving the ED); % of seen patients over 4 hours.
-* **Edge cases:** LWBS visits are left out of LOS. Visits still in the ED at the data cut are left out. Medians are computed in SQL with `ROW_NUMBER()`/`COUNT()`, because SQLite and older Oracle versions lack `MEDIAN`.
-* **Alert:** median boarding > 240 min.
+- **Asked by:** the ED operations director, who wanted to know how long patients spend in the ED and how much of that is waiting for an inpatient bed.
+- **Filtered on:** ED arrival time. One row per facility.
+- **Measures:**
+  - number of ED visits, and the percentage who left without being seen (LWBS)
+  - percentage admitted
+  - median time in the ED for discharged patients, and separately for admitted patients
+  - median boarding time, from the admit decision until the patient left the ED
+  - percentage of patients who were seen and stayed more than 4 hours
+- **Notes:** LWBS patients are excluded from the time measures, as are patients still in the ED at the cut-off. SQLite has no MEDIAN function, so I calculate medians with `ROW_NUMBER()` and `COUNT()`.
+- **Alert:** median boarding over 240 minutes.
 
-### 02 Lab Turnaround (KPI)
-* **Asked by:** laboratory director. **Question:** are STAT labs resulted within 60 minutes, and when do we miss?
-* **Qualifies on:** `orig_order_dt_tm`. **Grain:** facility × priority × orderable, plus a STAT-by-hour block.
-* **Measure:** time from order to the **first** verification of the order's results. % within target (STAT 60 min, Routine 240 min). One row per *order*, not per result component.
-* **Edge cases:** only orders with a current, non-In-Error result. A corrected result keeps its original verification time.
-* **Alert:** facility STAT % within 60 < 80%.
+## 02 Lab Turnaround
 
-### 03 Critical Result Notification (KPI + worklist)
-* **Asked by:** CNO / patient safety. **Question:** are critical lab values called to a provider within 30 minutes, and where are calls late or undocumented?
-* **Qualifies on:** `verified_dt_tm`. **Grain:** facility × nurse unit (where the patient was at verification), plus a worklist of every late or undocumented call with FIN, MRN, test, value and minutes.
-* **Measure:** minutes from verification to the first "Critical Result Notification" event on the encounter within 6 hours.
-* **Alert:** unit (≥ 20 criticals) under 80% within 30 min.
+- **Asked by:** the laboratory director, who wanted to know whether STAT labs come back within 60 minutes, and when they don't.
+- **Filtered on:** order time. One row per facility, priority and test, plus a breakdown of STAT orders by hour of day.
+- **Measure:** time from the order to the first verified result, and the percentage within target (60 minutes for STAT, 240 for routine). It counts orders, not individual results; a BMP has several results but counts as one order.
+- **Notes:** The report only includes orders that still have a current, valid result. A corrected result keeps its original verification time, and turnaround is calculated from whole seconds so a result at exactly 60:00 counts as on time.
+- **Alert:** a facility below 80% on STAT.
 
-### 04 30-Day Readmissions (KPI)
-* **Asked by:** quality / case management. **Grain:** discharging facility, and facility × disposition.
-* **Index stay:** inpatient discharge in range, not Expired. **Readmission:** any inpatient admission for the same person at any facility within 30 days (`inpatient_admit_dt_tm`).
-* **Edge cases:** discharges in the last 30 days before the data cut are excluded so every index stay has a full look-back. Not risk-adjusted, and planned readmissions are not removed. The CMS measure does both; this is an operational screen.
-* **Alert:** rate > 15%.
+## 03 Critical Result Notification
 
-### 05 Midnight Census & Occupancy (operational)
-* **Asked by:** house supervisor / capacity management. **Grain:** unit × day (`census_daily`) and unit summary (`census_summary`).
-* **Measure:** patients whose location segment covers 00:00, divided by staffed beds from `CUST_UNIT_CAPACITY`. Days are generated with a recursive CTE.
-* **Alert:** average occupancy > 93%.
+- **Asked by:** nursing leadership and patient safety, who wanted to know whether critical lab values are called to a provider within 30 minutes and which units are falling behind.
+- **Filtered on:** result verification time. One row per facility and unit (the unit the patient was on when the result came back), plus a worklist of every late or undocumented call with FIN, MRN, test and value.
+- **Measure:** minutes from verification to the first "Critical Result Notification" documented on the encounter within the following 6 hours.
+- **Alert:** any unit with at least 20 critical results and fewer than 80% called within 30 minutes.
 
-### 06 Open Lab Orders > 24 h (worklist)
-* **Asked by:** lab supervisor. Lab orders still in Ordered status 24 h after they were placed, with current unit, FIN and a suggested action (recollect if in house; cancel or follow up if discharged). Meant to run as a daily scheduled ops job.
+## 04 30-Day Readmissions
 
-### 07 Duplicate Lab Orders (operational / waste)
-* **Asked by:** lab director + clinical informatics. A duplicate is the same orderable on the same encounter within 120 min of an earlier order that was not cancelled. Reports duplicates, how many were drawn and run anyway, and duplicates per 1,000 orders.
-* **Alert:** facility > 20 per 1,000. Feeds the Discern rule decision in [discern_rules.md](discern_rules.md).
+- **Asked by:** quality and case management. One row per discharging facility, and per facility and disposition.
+- **Index stay:** an inpatient discharge in the date range, where the patient didn't die.
+- **Readmission:** any inpatient admission for the same patient, at any of the three hospitals, within 30 days.
+- **Notes:** Discharges from the last 30 days before the cut-off are left out, because their 30-day window isn't over yet. This is an operational screen, not the CMS measure: it isn't risk-adjusted and doesn't exclude planned readmissions.
+- **Alert:** a rate above 15%.
 
-### 08 Discern Rule Silent-Mode Summary
-* Firings per rule × facility (and per day) from `EKS_MODULE_AUDIT`. It shows the projected alert load before go-live.
+## 05 Midnight Census and Occupancy
+
+- **Asked by:** the house supervisor and capacity management. One row per unit per day, plus a summary per unit.
+- **Measure:** patients on the unit at midnight, divided by staffed beds. The list of days comes from a recursive CTE, so no calendar table is needed.
+- **Alert:** average occupancy above 93%.
+
+## 06 Open Lab Orders Over 24 Hours
+
+- **Asked by:** the lab supervisor.
+- **What it lists:** lab orders still in Ordered status more than 24 hours after they were placed. For each one it shows the patient's current unit and FIN, and a suggested next step: recollect if the patient is still in house, cancel or follow up if they've gone home.
+- **How it runs:** it's designed to run every morning as a scheduled ops job.
+
+## 07 Duplicate Lab Orders
+
+- **Asked by:** the lab director and clinical informatics.
+- **What counts as a duplicate:** the same test on the same encounter within 120 minutes of an earlier order that wasn't cancelled.
+- **Measures:** duplicate count, how many were actually drawn and run, and duplicates per 1,000 orders.
+- **Alert:** a facility above 20 per 1,000.
+- This report fed into the rule decision in [discern_rules.md](discern_rules.md).
+
+## 08 Discern Rule Silent-Mode Summary
+
+- **What it shows:** how often each rule would have fired, by facility and per day, read from EKS_MODULE_AUDIT. It's the expected alert load if the rules were switched on.
