@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" font-family="Aptos, -apple-system, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a919c"/>
+    </marker>
+    <style>
+      .box{fill:#fff;stroke:#b9c0ca;stroke-width:1}
+      .key{fill:#e8eef7;stroke:#2a6fcf;stroke-width:1.4}
+      .t{font-size:13px;font-weight:700;fill:#1f2a44;text-anchor:middle}
+      .s{font-size:10.5px;fill:#5b6370;text-anchor:middle}
+      .l{font-size:10px;fill:#6b7280}
+      .ln{stroke:#8a919c;stroke-width:1.2;fill:none}
+    </style>
+  </defs>
+  <rect width="760" height="560" fill="#ffffff"/>
+  <text x="20" y="26" font-size="13" font-weight="700" fill="#1f2a44">Nothing is published until the validation gate passes</text>
+
+  <!-- left column: main pipeline -->
+  <rect class="box" x="20" y="44" width="430" height="58" rx="5"/>
+  <text class="t" x="235" y="67">Synthetic data generator (Python, fixed seed)</text>
+  <text class="s" x="235" y="85">3 hospitals · 6 months · planted problems, test patients, corrected results</text>
+
+  <line class="ln" x1="235" y1="102" x2="235" y2="124" marker-end="url(#arr)"/>
+
+  <rect class="box" x="20" y="126" width="430" height="64" rx="5"/>
+  <text class="t" x="235" y="149">Millennium-style database (SQLite)</text>
+  <text class="s" x="235" y="166">ENCOUNTER · ENCNTR_LOC_HIST · ORDERS · ORDER_DETAIL</text>
+  <text class="s" x="235" y="180">versioned CLINICAL_EVENT · CODE_VALUE · 13 tables, 1.2M rows</text>
+
+  <line class="ln" x1="235" y1="190" x2="235" y2="212" marker-end="url(#arr)"/>
+
+  <rect class="key" x="20" y="214" width="430" height="64" rx="5"/>
+  <text class="t" x="235" y="237">Validation gate: 21 checks</text>
+  <text class="s" x="235" y="254">14 data-quality checks + 7 control totals</text>
+  <text class="s" x="235" y="268">one failure stops the run before anything is published</text>
+
+  <line class="ln" x1="235" y1="278" x2="235" y2="300" marker-end="url(#arr)"/>
+
+  <rect class="box" x="20" y="302" width="430" height="64" rx="5"/>
+  <text class="t" x="235" y="325">Report runner: 7 reports, 13 SQL queries</text>
+  <text class="s" x="235" y="342">prompts: start date, end date, facility (like CCL $START_DT / $FACILITY)</text>
+  <text class="s" x="235" y="356">ED · lab TAT · critical calls · readmissions · census · open orders · duplicates</text>
+
+  <line class="ln" x1="235" y1="366" x2="235" y2="388" marker-end="url(#arr)"/>
+
+  <!-- outputs -->
+  <rect class="box" x="20" y="390" width="136" height="70" rx="5"/>
+  <text class="t" x="88" y="414">Report page</text>
+  <text class="s" x="88" y="431">HTML: alerts, KPI tiles,</text>
+  <text class="s" x="88" y="445">filter, sortable tables</text>
+  <rect class="box" x="167" y="390" width="136" height="70" rx="5"/>
+  <text class="t" x="235" y="414">CSV extracts</text>
+  <text class="s" x="235" y="431">every query,</text>
+  <text class="s" x="235" y="445">full rows</text>
+  <rect class="box" x="314" y="390" width="136" height="70" rx="5"/>
+  <text class="t" x="382" y="414">MPage JSON</text>
+  <text class="s" x="382" y="431">same shape as CCL</text>
+  <text class="s" x="382" y="445">cnvtrectojson()</text>
+
+  <line class="ln" x1="235" y1="460" x2="235" y2="482" marker-end="url(#arr)"/>
+  <rect class="box" x="20" y="484" width="430" height="58" rx="5"/>
+  <text class="t" x="235" y="507">Tests (19, pytest)</text>
+  <text class="s" x="235" y="524">every KPI recalculated independently in pandas and compared value by value</text>
+
+  <!-- right column -->
+  <rect class="box" x="500" y="126" width="240" height="64" rx="5"/>
+  <text class="t" x="620" y="149">Discern rule simulator</text>
+  <text class="s" x="620" y="166">replays orders and results in silent mode</text>
+  <text class="s" x="620" y="180">firings logged to EKS_MODULE_AUDIT</text>
+  <line class="ln" x1="450" y1="158" x2="498" y2="158" marker-end="url(#arr)"/>
+
+  <rect class="box" x="500" y="214" width="240" height="64" rx="5"/>
+  <text class="t" x="620" y="237">Oracle 23ai Free (Docker)</text>
+  <text class="s" x="620" y="254">reports 01–05 rewritten in Oracle SQL</text>
+  <text class="s" x="620" y="268">238 of 238 values match SQLite</text>
+  <path class="ln" d="M450,166 L475,166 L475,246 L498,246" marker-end="url(#arr)"/>
+
+  <rect class="box" x="500" y="302" width="240" height="64" rx="5"/>
+  <text class="t" x="620" y="325">CCL programs</text>
+  <text class="s" x="620" y="342">same logic as each SQL report,</text>
+  <text class="s" x="620" y="356">plus MPage driver and rule logic</text>
+  <line class="ln" x1="450" y1="334" x2="498" y2="334" stroke-dasharray="4 3"/>
+  <text class="l" x="456" y="327">mirrors</text>
+
+  <rect class="box" x="500" y="390" width="240" height="70" rx="5"/>
+  <text class="t" x="620" y="414">MPage component</text>
+  <text class="s" x="620" y="431">HTML/JS; in PowerChart calls CCL,</text>
+  <text class="s" x="620" y="445">off-domain reads the JSON file</text>
+  <line class="ln" x1="450" y1="425" x2="498" y2="425" marker-end="url(#arr)"/>
+</svg>
